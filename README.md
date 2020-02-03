@@ -1,5 +1,6 @@
 # testgo2.0
-
+自研httpRunner接口测试平台
+golang + gin + Vue + httpRunner
 ## Project setup
 ```
 yarn install
@@ -22,3 +23,4 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
