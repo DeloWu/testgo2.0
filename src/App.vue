@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <el-container id="base-container" style="position: absolute;height: 100%;width: 100%">
-      <el-header height="60px" style="width: 100%; padding:0px">
+      <el-header height="50px" style="width: 100%; padding:0px">
         <el-row id="header-div">
             <el-col :span="3">
               <router-link to="/">
                 <el-image
-                  style="width: 150px; height: 60px"
+                  style="width: 150px; height: 52px"
                   :src="url"
                   :fit="fit"></el-image>
               </router-link>
             </el-col>
             <el-col :span="6">
-            <router-link to="/"><span style="font-size: 30px;"><span style="color: #000000;">接口测试平台</span></span></router-link>
+            <router-link to="/"><span style="font-size: 30px;"><span style="color: rgb(51, 122, 175);">接口测试平台</span></span></router-link>
             <!-- <router-link to="/"><span class="link-span" style="font-size: 30px;">接口测试平台</span></router-link> -->
             </el-col>
             <el-col :span="12"></el-col>

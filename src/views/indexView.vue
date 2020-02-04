@@ -8,42 +8,42 @@
                     border
                     style="width: 80%">
                         <el-table-column
-                          prop="pro_counts"
+                          prop="proCounts"
                           label="项目数量"
                           width="100">
                         </el-table-column>
                         <el-table-column
-                          prop="env_counts"
+                          prop="envCounts"
                           label="环境数量"
                           width="100">
                         </el-table-column>
                         <el-table-column
-                          prop="api_counts"
+                          prop="apiCounts"
                           label="接口数量"
                           width="100">
                         </el-table-column>
                         <el-table-column
-                          prop="case_counts"
+                          prop="caseCounts"
                           label="用例数量"
                           width="100">
                         </el-table-column>
                         <el-table-column
-                          prop="suite_counts"
+                          prop="suiteCounts"
                           label="用例集数量"
                           width="100">
                         </el-table-column>
                           <el-table-column
-                          prop="report_counts"
+                          prop="reportCounts"
                           label="报告数量"
                           width="100">
                           </el-table-column>
                           <el-table-column
-                          prop="plan_counts"
+                          prop="planCounts"
                           label="执行计划数量"
                           width="120">
                           </el-table-column>
                         <el-table-column
-                          prop="mock_counts"
+                          prop="mockCounts"
                           label="mock服务数量">
                         </el-table-column>
                     </el-table>
@@ -64,18 +64,18 @@
 
 <script>
 export default {
-    name: 'App',
+    name: 'index',
     data() {
         return {
                 tableData: [{
-                    pro_counts: 0,
-                    env_counts: 0,
-                    api_counts: 0,
-                    case_counts: 0,
-                    suite_counts: 0,
-                    report_counts: 0,
-                    plan_counts: 0,
-                    mock_counts: 0
+                    proCounts: 0,
+                    envCounts: 0,
+                    apiCounts: 0,
+                    caseCounts: 0,
+                    suiteCounts: 0,
+                    reportCounts: 0,
+                    planCounts: 0,
+                    mockCounts: 0
                 }]
         }
     },

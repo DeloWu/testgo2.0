@@ -34,6 +34,46 @@ export const constantRoutes = [
         component: () => import('../views/indexView.vue'),
         hidden: true
     },
+    {
+        path: '/pro-index',
+        component: () => import('../views/proIndexView.vue'),
+        hidden: true
+    },
+    {
+        path: '/env-index',
+        component: () => import('../views/envIndexView.vue'),
+        hidden: true
+    },
+    // {
+    //     path: '/api-index',
+    //     component: () => import('../views/apiIndexView.vue'),
+    //     hidden: true
+    // },
+    // {
+    //     path: '/case-index',
+    //     component: () => import('../views/caseIndexView.vue'),
+    //     hidden: true
+    // },
+    // {
+    //     path: '/suite-index',
+    //     component: () => import('../views/suiteIndexView.vue'),
+    //     hidden: true
+    // },
+    // {
+    //     path: '/report-index',
+    //     component: () => import('../views/reportIndexView.vue'),
+    //     hidden: true
+    // },
+    // {
+    //     path: '/plan-index',
+    //     component: () => import('../views/planIndexView.vue'),
+    //     hidden: true
+    // },
+    // {
+    //     path: '/mock-server-index',
+    //     component: () => import('../views/mockServerIndexView.vue'),
+    //     hidden: true
+    // },
 ]
 
 const createRouter = () => new Router({
