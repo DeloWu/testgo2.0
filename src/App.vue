@@ -43,28 +43,28 @@
                   <span>基础信息</span>
                 </template>
                 <el-menu-item index="1-1">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location" style=""></i>项目管理</span></router-link>
+                    <router-link to="/pro-index"><span class="link-span"><i class="el-icon-location" style=""></i>项目管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-2">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>环境管理</span></router-link>
+                    <router-link to="/env-index"><span class="link-span"><i class="el-icon-location"></i>环境管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-3">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>接口管理</span></router-link>
+                    <router-link to="/api-index"><span class="link-span"><i class="el-icon-location"></i>接口管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-4">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>用例管理</span></router-link>
+                    <router-link to="/case-index"><span class="link-span"><i class="el-icon-location"></i>用例管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-5">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>用例集管理</span></router-link>
+                    <router-link to="/suite-index"><span class="link-span"><i class="el-icon-location"></i>用例集管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-6">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>测试报告管理</span></router-link>
+                    <router-link to="/report-index"><span class="link-span"><i class="el-icon-location"></i>测试报告管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-7">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>执行计划管理</span></router-link>
+                    <router-link to="/plan-index"><span class="link-span"><i class="el-icon-location"></i>执行计划管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-8">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>mock服务管理</span></router-link>
+                    <router-link to="/mock-index"><span class="link-span"><i class="el-icon-location"></i>mock服务管理</span></router-link>
                 </el-menu-item>
               </el-submenu>
               <el-submenu index="2">
@@ -73,11 +73,13 @@
                   <span>系统设置</span>
                 </template>
                 <el-menu-item index="2-1">
-                    <router-link to="/top"><span class="link-span"><i class="el-icon-location"></i>公共函数管理</span></router-link>
+                    <router-link to="/public-func-index"><span class="link-span"><i class="el-icon-location"></i>公共函数管理</span></router-link>
                 </el-menu-item>
               </el-submenu>
             </el-menu>
         </el-aside>
+        <!-- 其他页面注入 -->
+        <router-view></router-view>
         <!-- <el-container>
             <router-view></router-view>
           <el-main>
