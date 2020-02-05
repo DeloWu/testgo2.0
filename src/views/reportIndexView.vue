@@ -34,34 +34,48 @@
                         stripe
                         :height="480"
                         style="width: 100%"
-                        @cell-click="operate">
+                        @cell-click="operate"
+                        :default-sort = "{prop: 'reportCreateTime', order: 'descending'}">
                         <el-table-column
                           label="序号"
                           width="80"
                           type="index">
                         </el-table-column>
                         <el-table-column
-                          prop="proName"
-                          label="项目名称"
-                          width="250">
+                          :show-overflow-tooltip="true"
+                          prop="reportCreateTime"
+                          label="创建时间"
+                          width="250"
+                          sortable
+                          :formatter="dateTimeFormater">
                         </el-table-column>
                         <el-table-column
                           :show-overflow-tooltip="true"
-                          prop="proDesc"
-                          label="项目描述">
+                          prop="reportRunTime"
+                          label="执行时长"
+                          width="250"
+                          sortable
+                          :formatter="runTimeFormat">
+                        </el-table-column>
+                        <el-table-column
+                          :show-overflow-tooltip="true"
+                          prop="reportUser"
+                          label="执行者"
+                          width="250"
+                          sortable>
                         </el-table-column>
                         <el-table-column
                           fixed="right"
                           label="操作"
-                          prop="proIndex"
+                          prop="reportIndex"
                           width="60"
-                          class-name="edit">
-                          <el-button type="success" icon="el-icon-edit" circle ></el-button>
+                          class-name="open">
+                          <el-button type="success" icon="el-icon-search" circle ></el-button>
                         </el-table-column>
                         <el-table-column
                           fixed="right"
                           label=""
-                          prop="proIndex"
+                          prop="reportIndex"
                           width="60"
                           class-name=”delete“>
                           <el-button type="danger" icon="el-icon-delete" circle></el-button>
@@ -88,6 +102,7 @@
 </template>
 
 <script>
+import { formatDate, RunTimeFormater } from "../utils/timeOperator"
 export default {
     name: 'proIndex',
     data() {
@@ -96,54 +111,19 @@ export default {
             currentPage: 1,
             tableData: [
                 {
-                    proIndex: 11,
-                    proName: "项目一",
-                    proDesc: "项目描述一",
+                    reportCreateTime: 1583295432,
+                    reportRunTime: 3600,
+                    reportUser: "admin",
                 },
                 {
-                    proIndex: 22,
-                    proName: "项目二",
-                    proDesc: "项目描述二",
+                    reportCreateTime: 1583295431,
+                    reportRunTime: 3601,
+                    reportUser: "admin",
                 },
                 {
-                    proIndex: 33,
-                    proName: "项目三",
-                    proDesc: "项目描述三",
-                },
-                {
-                    proIndex: 44,
-                    proName: "项目四",
-                    proDesc: "项目描述四",
-                },
-                {
-                    proIndex: 22,
-                    proName: "项目二",
-                    proDesc: "项目描述二",
-                },
-                {
-                    proIndex: 33,
-                    proName: "项目三",
-                    proDesc: "项目描述三",
-                },
-                {
-                    proIndex: 44,
-                    proName: "项目四",
-                    proDesc: "项目描述四",
-                },
-                {
-                    proIndex: 22,
-                    proName: "项目二",
-                    proDesc: "项目描述二",
-                },
-                {
-                    proIndex: 33,
-                    proName: "项目三",
-                    proDesc: "项目描述三",
-                },
-                {
-                    proIndex: 44,
-                    proName: "项目四",
-                    proDesc: "项目描述四",
+                    reportCreateTime: 1583295433,
+                    reportRunTime: 3602,
+                    reportUser: "admin",
                 }
             ]
         }
@@ -179,15 +159,34 @@ export default {
             window.console.log("call add pro func");
         },
         operate(row, column, cell){
-            if (cell.className.indexOf("edit") >= 0) {
-                window.console.log("call edit func, cur row is: " + row.proIndex);
+            if (cell.className.indexOf("open") >= 0) {
+                window.console.log("call open func, cur row is: " + row.reportIndex);
             }else if(cell.className.indexOf("delete") >= 0){
-                window.console.log("call delete func, cur row is: " + row.proIndex);
+                window.console.log("call delete func, cur row is: " + row.reportIndex);
                 this.confirmDelete();
             }else {
-                window.console.log("no func match, cur row is: " + row.proIndex);
+                window.console.log("no func match, cur row is: " + row.reportIndex);
             }
         },
+        // 时间戳转化为datetime格式
+        dateTimeFormater(row) {
+            try{
+               return formatDate(row.reportCreateTime);
+            } catch(e){
+                window.console.log(e);
+                return row.reportCreateTime
+            }
+        },
+        // 3601s => 1h0m1s
+        runTimeFormat(row) {
+            try{
+                return RunTimeFormater(row.reportRunTime)
+            } catch(e){
+                window.console.log(e);
+                return row.reportRunTime
+            }
+            
+        }
     }
 }
 </script>
