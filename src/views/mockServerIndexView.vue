@@ -92,13 +92,14 @@
                         <el-table-column
                           
                           label="mock开关"
-                          width="90">
+                          width="90"
+                          class-name="switch">
                           <template slot-scope="scope">
                             <el-switch
                               v-model="scope.row.mockServerSwitch"
                               active-color="#13ce66"
                               inactive-color="#ff4949"
-                              @click="change(scope.row)">
+                              @change="!scope.row.mockServerSwitch">
                             </el-switch>
                           </template>
                         </el-table-column>
@@ -164,7 +165,6 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            tempSwitch: false,
             input: '',
             currentPage: 1,
             tableData: [
@@ -238,15 +238,17 @@ export default {
         },
         operate(row, column, cell){
             if (cell.className.indexOf("edit") >= 0) {
-                window.console.log("call edit func, cur row is: " + row.apiIndex);
+                window.console.log("call edit func, cur row is: " + row.mockServerIndex);
             }else if(cell.className.indexOf("delete") >= 0){
-                window.console.log("call delete func, cur row is: " + row.apiIndex);
+                window.console.log("call delete func, cur row is: " + row.mockServerIndex);
                 this.confirmDelete();
             }else if(cell.className.indexOf("run") >= 0){
                 this.dialogVisible = true;
-                window.console.log("call run func, cur row is: " + row.apiIndex);
+                window.console.log("call run func, cur row is: " + row.mockServerIndex);
+            }else if(cell.className.indexOf("switch") >= 0){
+                window.console.log("call switch func, cur row  is: " + row.mockServerIndex, "cur row mockServerSwitch is: " + row.mockServerSwitch, "TODO: 请求后端接口修改数据库mockServerSwitch字段");
             }else {
-                window.console.log("no func match, cur row is: " + row.apiIndex);
+                window.console.log("no func match, cur row is: " + row.mockServerIndex);
             }
         },
         filter(){
