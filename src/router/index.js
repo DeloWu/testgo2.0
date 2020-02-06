@@ -69,11 +69,11 @@ export const constantRoutes = [
     //     component: () => import('../views/planIndexView.vue'),
     //     hidden: true
     // },
-    // {
-    //     path: '/mock-server-index',
-    //     component: () => import('../views/mockServerIndexView.vue'),
-    //     hidden: true
-    // },
+    {
+        path: '/mock-server-index',
+        component: () => import('../views/mockServerIndexView.vue'),
+        hidden: true
+    },
 ]
 
 const createRouter = () => new Router({

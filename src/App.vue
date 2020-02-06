@@ -64,7 +64,7 @@
                     <router-link to="/plan-index"><span class="link-span"><i class="el-icon-location"></i>执行计划管理</span></router-link>
                 </el-menu-item>
                 <el-menu-item index="1-8">
-                    <router-link to="/mock-index"><span class="link-span"><i class="el-icon-location"></i>mock服务管理</span></router-link>
+                    <router-link to="/mock-server-index"><span class="link-span"><i class="el-icon-location"></i>mock服务管理</span></router-link>
                 </el-menu-item>
               </el-submenu>
               <el-submenu index="2">
