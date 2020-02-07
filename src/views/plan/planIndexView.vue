@@ -5,7 +5,7 @@
                 <el-col :span="12">
                     <el-breadcrumb separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item :to="{ path: '/pro-index' }">项目管理</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/pro-index' }">计划管理</el-breadcrumb-item>
                     </el-breadcrumb>
                 </el-col>
                 <el-col :span="12"></el-col>
@@ -13,7 +13,7 @@
             <br>
             <el-row>
                 <el-col :span="3">
-                    <el-button type="primary" round @click="addPro">添加项目</el-button>
+                    <el-button type="primary" round @click="addPro">添加计划</el-button>
                 </el-col>
                 <el-col :span="14"></el-col>
                 <el-col :span="4" :offset="15">
@@ -43,25 +43,31 @@
                         </el-table-column>
                         <el-table-column
                           :show-overflow-tooltip="true"
-                          prop="reportCreateTime"
-                          label="创建时间"
+                          prop="planRunSuite"
+                          label="用例集"
                           width="250"
+                          sortable>
+                        </el-table-column>
+                        <el-table-column
+                          :show-overflow-tooltip="true"
+                          prop="planPeriod"
+                          label="执行周期"
+                          width="200"
+                          sortable>
+                        </el-table-column>
+                        <el-table-column
+                          :show-overflow-tooltip="true"
+                          prop="planCreateTime"
+                          label="创建时间"
+                          width="200"
                           sortable
                           :formatter="dateTimeFormater">
                         </el-table-column>
                         <el-table-column
                           :show-overflow-tooltip="true"
-                          prop="reportRunTime"
-                          label="执行时长"
-                          width="250"
-                          sortable
-                          :formatter="runTimeFormat">
-                        </el-table-column>
-                        <el-table-column
-                          :show-overflow-tooltip="true"
-                          prop="reportUser"
-                          label="执行者"
-                          width="250"
+                          prop="planCreator"
+                          label="创建者"
+                          width="120"
                           sortable>
                         </el-table-column>
                         <el-table-column
@@ -79,6 +85,14 @@
                           width="60"
                           class-name=”delete“>
                           <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                        </el-table-column>
+                        <el-table-column
+                          fixed="right"
+                          label=""
+                          prop="caseIndex"
+                          width="60"
+                          class-name="run">
+                          <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
                         </el-table-column>
                         <el-table-column label="" width="100" fixed="right"></el-table-column>
                     </el-table>
@@ -102,7 +116,7 @@
 </template>
 
 <script>
-import { formatDate, RunTimeFormater } from "../utils/timeOperator"
+import { formatDate } from "@utils/timeOperator"
 export default {
     name: 'proIndex',
     data() {
@@ -111,20 +125,19 @@ export default {
             currentPage: 1,
             tableData: [
                 {
-                    reportCreateTime: 1583295432,
-                    reportRunTime: 3600,
-                    reportUser: "admin",
+                    planId: 11,
+                    planRunSuite: "[1,2,3,4]",
+                    planPeriod: "* 1 * * *",
+                    planCreateTime: 1583295431,
+                    planCreator: "admin"
                 },
                 {
-                    reportCreateTime: 1583295431,
-                    reportRunTime: 3601,
-                    reportUser: "admin",
+                    planId: 22,
+                    planRunSuite: "[2,3]",
+                    planPeriod: "* 23 * * *",
+                    planCreateTime: 1583295441,
+                    planCreator: "admin"
                 },
-                {
-                    reportCreateTime: 1583295433,
-                    reportRunTime: 3602,
-                    reportUser: "admin",
-                }
             ]
         }
     },
@@ -164,6 +177,9 @@ export default {
             }else if(cell.className.indexOf("delete") >= 0){
                 window.console.log("call delete func, cur row is: " + row.reportIndex);
                 this.confirmDelete();
+            }else if(cell.className.indexOf("run") >= 0){
+                this.dialogVisible = true;
+                window.console.log("call run func, cur row is: " + row.caseIndex);
             }else {
                 window.console.log("no func match, cur row is: " + row.reportIndex);
             }
@@ -171,22 +187,12 @@ export default {
         // 时间戳转化为datetime格式
         dateTimeFormater(row) {
             try{
-               return formatDate(row.reportCreateTime);
+               return formatDate(row.planCreateTime);
             } catch(e){
                 window.console.log(e);
                 return row.reportCreateTime
             }
         },
-        // 3601s => 1h0m1s
-        runTimeFormat(row) {
-            try{
-                return RunTimeFormater(row.reportRunTime)
-            } catch(e){
-                window.console.log(e);
-                return row.reportRunTime
-            }
-            
-        }
     }
 }
 </script>

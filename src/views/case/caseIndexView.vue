@@ -5,7 +5,7 @@
                 <el-col :span="12">
                     <el-breadcrumb separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item :to="{ path: '/mock-server-index' }">mock服务管理</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/case-index' }">用例管理</el-breadcrumb-item>
                     </el-breadcrumb>
                 </el-col>
                 <el-col :span="12"></el-col>
@@ -13,7 +13,7 @@
             <br>
             <el-row>
                 <el-col :span="3">
-                    <el-button type="primary" round @click="addMockServer">添加mock服务</el-button>
+                    <el-button type="primary" round @click="addCase">添加用例</el-button>
                 </el-col>
                 <!-- <el-col :span="5"></el-col> -->
                 <el-col :span="4" :offset="11">
@@ -45,6 +45,7 @@
                     <el-table
                         :data="tableData"
                         stripe
+                        show-overflow-tooltip
                         :height="480"
                         style="width: 100%"
                         @cell-click="operate">
@@ -55,58 +56,25 @@
                         </el-table-column>
                         <el-table-column
                           :show-overflow-tooltip="true"
-                          prop="mockServerName"
-                          label="mock接口名称"
-                          width="120">
+                          prop="caseName"
+                          label="用例名称"
+                          width="140">
                         </el-table-column>
                         <el-table-column
                           :show-overflow-tooltip="true"
-                          prop="mockServerUri"
-                          label="接口路径"
-                          width="150">
-                        </el-table-column>
-                        <el-table-column
-                          prop="mockServerMethod"
-                          label="请求方式"
-                          width="80">
+                          prop="caseSteps"
+                          label="用例步骤"
+                          width="350">
                         </el-table-column>
                         <el-table-column
                           :show-overflow-tooltip="true"
-                          prop="mockServerRequestData"
-                          label="请求参数">
-                        </el-table-column>
-                        <el-table-column
-                          :show-overflow-tooltip="true"
-                          prop="mockServerDefaultResp"
-                          label="默认响应">
-                        </el-table-column>
-                        <el-table-column
-                          :show-overflow-tooltip="true"
-                          prop="mockServerDesc"
+                          prop="caseDesc"
                           label="接口描述">
-                        </el-table-column>
-                        <el-table-column
-                          prop="relativePro"
-                          label="所属项目">
-                        </el-table-column>
-                        <el-table-column
-                          
-                          label="mock开关"
-                          width="90"
-                          class-name="switch">
-                          <template slot-scope="scope">
-                            <el-switch
-                              v-model="scope.row.mockServerSwitch"
-                              active-color="#13ce66"
-                              inactive-color="#ff4949"
-                              @change="!scope.row.mockServerSwitch">
-                            </el-switch>
-                          </template>
                         </el-table-column>
                         <el-table-column
                           fixed="right"
                           label="操"
-                          prop="apiIndex"
+                          prop="caseIndex"
                           width="60"
                           class-name="edit">
                           <el-button type="success" icon="el-icon-edit" circle ></el-button>
@@ -114,21 +82,21 @@
                         <el-table-column
                           fixed="right"
                           label="作"
-                          prop="apiIndex"
+                          prop="caseIndex"
                           width="60"
-                          class-name=”delete“>
+                          class-name="delete">
                           <el-button type="danger" icon="el-icon-delete" circle></el-button>
                         </el-table-column>
                         <el-table-column
                           fixed="right"
                           label=""
-                          prop="apiIndex"
+                          prop="caseIndex"
                           width="60"
-                          class-name=”run“
-                          @click="dialogVisible = true">
+                          class-name="run">
                           <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
                         </el-table-column>
                         <el-table-column label="" width="100" fixed="right"></el-table-column>
+
                     </el-table>
                 </el-col>
             </el-row>
@@ -147,10 +115,10 @@
             </el-row>
         </el-footer>
         <el-dialog
-          title="发送请求"
+          title="执行用例"
           :visible.sync="dialogVisible"
           width="30%">
-          <span>TODO: 设计运行接口样式</span>
+          <span>TODO: 设计运行用例样式</span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">运 行</el-button>
@@ -161,7 +129,7 @@
 
 <script>
 export default {
-    name: 'apiIndex',
+    name: 'caseIndex',
     data() {
         return {
             dialogVisible: false,
@@ -169,26 +137,18 @@ export default {
             currentPage: 1,
             tableData: [
                 {
-                    mockServerIndex: 11,
-                    mockServerName: "mock接口一",
-                    mockServerUri: "/foo",
-                    mockServerMethod: "get",
-                    mockServerRequestData: `{"foo": "bar"}`,
-                    mockServerDefaultResp: `{"code": 200}`,
-                    mockServerDesc: "mock描述一",
-                    relativePro: 1,
-                    mockServerSwitch: true,
+                    caseIndex: 11,
+                    caseName: "用例一",
+                    caseSteps: "[1,2,3,4,(TODO:id映射=>接口名称)]",
+                    relativePro: [11, 22],
+                    caseDesc: "用例描述一",
                 },
                 {
-                    mockServerIndex: 22,
-                    mockServerName: "mock接口二",
-                    mockServerUri: "/bar",
-                    mockServerMethod: "post",
-                    mockServerRequestData: `{"foo": "bar"}`,
-                    mockServerDefaultResp: `{"code": 400}`,
-                    mockServerDesc: "mock描述二",
-                    relativePro: 1,
-                    mockServerSwitch: false,
+                    caseIndex: 22,
+                    caseName: "用例二",
+                    caseSteps: "[3,6,9]",
+                    relativePro: [11],
+                    caseDesc: "用例描述一用例描述一用例描述一用例描述一用例描述一用例描述一用例描述一用例描述一用例描述一",
                 },
             ],
             filterPros: [],
@@ -233,22 +193,20 @@ export default {
               });
             });
           },
-        addMockServer(){
-            window.console.log("call add mock server func");
+        addCase(){
+            window.console.log("call add Case func");
         },
         operate(row, column, cell){
             if (cell.className.indexOf("edit") >= 0) {
-                window.console.log("call edit func, cur row is: " + row.mockServerIndex);
+                window.console.log("call edit func, cur row is: " + row.caseIndex);
             }else if(cell.className.indexOf("delete") >= 0){
-                window.console.log("call delete func, cur row is: " + row.mockServerIndex);
+                window.console.log("call delete func, cur row is: " + row.caseIndex);
                 this.confirmDelete();
             }else if(cell.className.indexOf("run") >= 0){
                 this.dialogVisible = true;
-                window.console.log("call run func, cur row is: " + row.mockServerIndex);
-            }else if(cell.className.indexOf("switch") >= 0){
-                window.console.log("call switch func, cur row  is: " + row.mockServerIndex, "cur row mockServerSwitch is: " + row.mockServerSwitch, "TODO: 请求后端接口修改数据库mockServerSwitch字段");
+                window.console.log("call run func, cur row is: " + row.caseIndex);
             }else {
-                window.console.log("no func match, cur row is: " + row.mockServerIndex);
+                window.console.log("no func match, cur row is: " + row.caseIndex);
             }
         },
         filter(){

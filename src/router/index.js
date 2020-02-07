@@ -31,47 +31,47 @@ Vue.use(Router)
 export const constantRoutes = [
     {
         path: '/',
-        component: () => import('../views/indexView.vue'),
+        component: () => import('@views/indexView.vue'),
         hidden: true
     },
     {
         path: '/pro-index',
-        component: () => import('../views/proIndexView.vue'),
+        component: () => import('@views/project/proIndexView.vue'),
         hidden: true
     },
     {
         path: '/env-index',
-        component: () => import('../views/envIndexView.vue'),
+        component: () => import('@views/environment/envIndexView.vue'),
         hidden: true
     },
     {
         path: '/api-index',
-        component: () => import('../views/apiIndexView.vue'),
+        component: () => import('@views/api/apiIndexView.vue'),
         hidden: true
     },
     {
         path: '/case-index',
-        component: () => import('../views/caseIndexView.vue'),
+        component: () => import('@views/case/caseIndexView.vue'),
         hidden: true
     },
     {
         path: '/suite-index',
-        component: () => import('../views/suiteIndexView.vue'),
+        component: () => import('@views/suite/suiteIndexView.vue'),
         hidden: true
     },
     {
         path: '/report-index',
-        component: () => import('../views/reportIndexView.vue'),
+        component: () => import('@views/report/reportIndexView.vue'),
         hidden: true
     },
-    // {
-    //     path: '/plan-index',
-    //     component: () => import('../views/planIndexView.vue'),
-    //     hidden: true
-    // },
+    {
+        path: '/plan-index',
+        component: () => import('@views/plan/planIndexView.vue'),
+        hidden: true
+    },
     {
         path: '/mock-server-index',
-        component: () => import('../views/mockServerIndexView.vue'),
+        component: () => import('@views/mockServer/mockServerIndexView.vue'),
         hidden: true
     },
 ]
