@@ -54,13 +54,13 @@
                           type="index">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="apiName"
                           label="接口名称"
                           width="140">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="apiUrl"
                           label="接口路径"
                           width="240">
@@ -71,12 +71,12 @@
                           width="80">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="apiRequestData"
                           label="请求参数">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="apiDesc"
                           label="接口描述">
                         </el-table-column>

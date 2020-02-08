@@ -60,12 +60,12 @@
                           width="150">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="suiteSteps"
                           label="用例集步骤">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="suiteDesc"
                           label="用例集描述">
                         </el-table-column>

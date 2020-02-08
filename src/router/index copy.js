@@ -30,11 +30,6 @@ Vue.use(Router)
  */
 export const constantRoutes = [
     {
-        path: '/login',
-        component: () => import('@views/login/loginView.vue'),
-        hidden: true
-    },
-    {
         path: '/',
         component: () => import('@views/indexView.vue'),
         hidden: true
@@ -42,16 +37,6 @@ export const constantRoutes = [
     {
         path: '/pro-index',
         component: () => import('@views/project/proIndexView.vue'),
-        hidden: true
-    },
-    {
-        path: '/pro-add',
-        component: () => import('@views/project/proAddView.vue'),
-        hidden: true
-    },
-    {
-        path: '/pro-update',
-        component: () => import('@views/project/proUpdateView.vue'),
         hidden: true
     },
     {

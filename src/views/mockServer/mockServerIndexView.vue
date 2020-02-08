@@ -54,13 +54,13 @@
                           type="index">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="mockServerName"
                           label="mock接口名称"
                           width="120">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="mockServerUri"
                           label="接口路径"
                           width="150">
@@ -71,17 +71,17 @@
                           width="80">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="mockServerRequestData"
                           label="请求参数">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="mockServerResp"
                           label="默认响应">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="mockServerDesc"
                           label="接口描述">
                         </el-table-column>
@@ -161,7 +161,7 @@
 
 <script>
 export default {
-    name: 'apiIndex',
+    name: 'mockServerIndex',
     data() {
         return {
             dialogVisible: false,

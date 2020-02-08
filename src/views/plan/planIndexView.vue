@@ -42,21 +42,21 @@
                           type="index">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="planRunSuite"
                           label="用例集"
                           width="250"
                           sortable>
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="planPeriod"
                           label="执行周期"
                           width="200"
                           sortable>
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="planCreateTime"
                           label="创建时间"
                           width="200"
@@ -64,7 +64,7 @@
                           :formatter="dateTimeFormater">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="planCreator"
                           label="创建者"
                           width="120"
@@ -118,7 +118,7 @@
 <script>
 import { formatDate } from "@utils/timeOperator"
 export default {
-    name: 'proIndex',
+    name: 'planIndex',
     data() {
         return {
             input: '',

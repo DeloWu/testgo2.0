@@ -55,19 +55,19 @@
                           type="index">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="caseName"
                           label="用例名称"
                           width="140">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="caseSteps"
                           label="用例步骤"
                           width="350">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="caseDesc"
                           label="接口描述">
                         </el-table-column>

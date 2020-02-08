@@ -42,7 +42,7 @@
                           type="index">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="reportCreateTime"
                           label="创建时间"
                           width="250"
@@ -50,7 +50,7 @@
                           :formatter="dateTimeFormater">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="reportRunTime"
                           label="执行时长"
                           width="250"
@@ -58,7 +58,7 @@
                           :formatter="runTimeFormat">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="reportUser"
                           label="执行者"
                           width="250"
@@ -104,7 +104,7 @@
 <script>
 import { formatDate, RunTimeFormater } from "@utils/timeOperator"
 export default {
-    name: 'proIndex',
+    name: 'reportIndex',
     data() {
         return {
             input: '',

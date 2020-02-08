@@ -13,7 +13,7 @@
             <br>
             <el-row>
                 <el-col :span="3">
-                    <el-button type="primary" round @click="addPro">添加项目</el-button>
+                    <router-link to="/pro-add"><el-button type="primary" round>添加项目</el-button></router-link>
                 </el-col>
                 <el-col :span="14"></el-col>
                 <el-col :span="4" :offset="15">
@@ -46,7 +46,7 @@
                           width="250">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="proDesc"
                           label="项目描述">
                         </el-table-column>

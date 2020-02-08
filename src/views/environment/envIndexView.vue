@@ -59,7 +59,7 @@
                           width="150">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="envIp"
                           label="域名/IP"
                           width="240">
@@ -70,7 +70,7 @@
                           width="80">
                         </el-table-column>
                         <el-table-column
-                          :show-overflow-tooltip="true"
+                          show-overflow-tooltip
                           prop="envDesc"
                           label="环境描述">
                         </el-table-column>
