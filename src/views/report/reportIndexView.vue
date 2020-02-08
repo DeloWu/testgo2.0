@@ -112,24 +112,27 @@ export default {
             tableData: [
                 {
                     reportId: 11,
-                    reportCreateTime: 1583295432,
                     reportRunTime: 3600,
                     reportUser: "admin",
                     reportPath: "",
+                    createTime: 1581135254,
+                    modifyTime: 1581135255,
                 },
                 {
                     reportId: 22,
-                    reportCreateTime: 1583295431,
                     reportRunTime: 3601,
                     reportUser: "admin",
                     reportPath: "",
+                    createTime: 1581135254,
+                    modifyTime: 1581135255,
                 },
                 {
                     reportId: 33,
-                    reportCreateTime: 1583295433,
                     reportRunTime: 3602,
                     reportUser: "admin",
                     reportPath: "",
+                    createTime: 1581135251,
+                    modifyTime: 1581135251,
                 }
             ]
         }
@@ -177,10 +180,10 @@ export default {
         // 时间戳转化为datetime格式
         dateTimeFormater(row) {
             try{
-               return formatDate(row.reportCreateTime);
+               return formatDate(row.createTime);
             } catch(e){
                 window.console.log(e);
-                return row.reportCreateTime
+                return row.createTime
             }
         },
         // 3601s => 1h0m1s

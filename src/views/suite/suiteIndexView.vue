@@ -140,6 +140,12 @@ export default {
                     suiteSteps: "[1,4,5,(id映射=>用例名称)]",
                     suiteDesc: "用例集描述一",
                     relativePro: 1,
+                    createTime: 1581135254,
+                    modifyTime: 1581135255,
+                    configVariables: [{"expected_status_code": 200}],
+                    configBaseUrl: "http://127.0.0.1:5000",
+                    variables: {"caseId": [{"expected_status_code": 200}], "caseId2": [{"expected_status_code": 200}]},
+                    parameters: {"caseId": [{"variables1": ["v1", "v2"]}, {"expected_status_code": [201, 404]}]}
                 },
                 {
                     suiteIndex: 22,
@@ -147,6 +153,12 @@ export default {
                     suiteSteps: "[2,4,5,(id映射=>用例名称)]",
                     suiteDesc: "用例集描述一",
                     relativePro: 2,
+                    createTime: 1581135254,
+                    modifyTime: 1581135255,
+                    configVariables: [{"expected_status_code": 200}],
+                    configBaseUrl: "http://127.0.0.1:5000",
+                    variables: {"caseId": [{"expected_status_code": 200}], "caseId2": [{"expected_status_code": 200}]},
+                    parameters: {"caseId": [{"variables1": ["v1", "v2"]}, {"expected_status_code": [201, 404]}]}
                 },
             ],
             filterPros: [],

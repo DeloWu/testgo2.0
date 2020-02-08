@@ -128,15 +128,17 @@ export default {
                     planId: 11,
                     planRunSuite: "[1,2,3,4]",
                     planPeriod: "* 1 * * *",
-                    planCreateTime: 1583295431,
-                    planCreator: "admin"
+                    planCreator: "admin",
+                    createTime: 1581135254,
+                    modifyTime: 1581135255,
                 },
                 {
                     planId: 22,
                     planRunSuite: "[2,3]",
                     planPeriod: "* 23 * * *",
-                    planCreateTime: 1583295441,
-                    planCreator: "admin"
+                    planCreator: "admin",
+                    createTime: 1581135254,
+                    modifyTime: 1581135255,
                 },
             ]
         }
@@ -187,10 +189,10 @@ export default {
         // 时间戳转化为datetime格式
         dateTimeFormater(row) {
             try{
-               return formatDate(row.planCreateTime);
+               return formatDate(row.createTime);
             } catch(e){
                 window.console.log(e);
-                return row.reportCreateTime
+                return row.createTime
             }
         },
     }
