@@ -49,14 +49,14 @@
                     </el-table>
                 </el-col>
             </el-row>
-            <el-rol>
+            <el-row>
                 <el-col :span="24">
                     <h3>近期用例执行情况</h3><br>
                     <div>
                         <H1>TODO: 数据可视化表格</H1>
                     </div>
                 </el-col>
-            </el-rol>
+            </el-row>
         </el-main>
           <el-footer height="80px"></el-footer>
     </el-container>

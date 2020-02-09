@@ -13,16 +13,16 @@
             <br>
             <el-row>
                 <el-col :span="3">
-                    <el-button type="primary" round @click="addCase">添加用例</el-button>
+                    <router-link to="/case-add"><el-button type="primary" round>添加用例</el-button></router-link>
                 </el-col>
                 <!-- <el-col :span="5"></el-col> -->
                 <el-col :span="4" :offset="11">
                     <el-select v-model="filterPros" multiple placeholder="请选择项目">
                         <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </el-col>
@@ -31,9 +31,9 @@
                 </el-col>
                 <el-col :span="4" :offset="0">
                     <el-input
-                      placeholder="请输入内容搜索"
-                      v-model="input"
-                      clearable>
+                        placeholder="请输入内容搜索"
+                        v-model="input"
+                        clearable>
                     </el-input>
                 </el-col>
                 <el-col :span="1">
@@ -50,50 +50,50 @@
                         style="width: 100%"
                         @cell-click="operate">
                         <el-table-column
-                          label="序号"
-                          width="50"
-                          type="index">
+                            label="序号"
+                            width="50"
+                            type="index">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="caseName"
-                          label="用例名称"
-                          width="140">
+                            show-overflow-tooltip
+                            prop="caseName"
+                            label="用例名称"
+                            width="140">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="caseSteps"
-                          label="用例步骤"
-                          width="350">
+                            show-overflow-tooltip
+                            prop="caseSteps"
+                            label="用例步骤"
+                            width="350">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="caseDesc"
-                          label="接口描述">
+                            show-overflow-tooltip
+                            prop="caseDesc"
+                            label="接口描述">
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="操"
-                          prop="caseIndex"
-                          width="60"
-                          class-name="edit">
-                          <el-button type="success" icon="el-icon-edit" circle ></el-button>
+                            fixed="right"
+                            label="操"
+                            prop="caseIndex"
+                            width="60"
+                            class-name="edit">
+                            <el-button type="success" icon="el-icon-edit" circle ></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="作"
-                          prop="caseIndex"
-                          width="60"
-                          class-name="delete">
-                          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                            fixed="right"
+                            label="作"
+                            prop="caseIndex"
+                            width="60"
+                            class-name="delete">
+                            <el-button type="danger" icon="el-icon-delete" circle></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label=""
-                          prop="caseIndex"
-                          width="60"
-                          class-name="run">
-                          <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
+                            fixed="right"
+                            label=""
+                            prop="caseIndex"
+                            width="60"
+                            class-name="run">
+                            <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
                         </el-table-column>
                         <el-table-column label="" width="100" fixed="right"></el-table-column>
 
@@ -104,25 +104,25 @@
         <el-footer height="80px">
             <el-row>
                 <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :page-size="10"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="200">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="200">
                 </el-pagination>
             </el-row>
         </el-footer>
         <el-dialog
-          title="执行用例"
-          :visible.sync="dialogVisible"
-          width="30%">
-          <span>TODO: 设计运行用例样式</span>
-          <span slot="footer" class="dialog-footer">
+            title="执行用例"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <span>TODO: 设计运行用例样式</span>
+            <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">运 行</el-button>
-          </span>
+            </span>
         </el-dialog>
     </el-container>
 </template>
@@ -139,7 +139,7 @@ export default {
                 {
                     caseIndex: 11,
                     caseName: "用例一",
-                    caseSteps: `[{"1":"api"}, {"4":"testcase"}]`,
+                    caseSteps: `[{"1":"api"}, {"4":"case"}]`,
                     relativePro: [11, 22],
                     createTime: 1581135254,
                     modifyTime: 1581135255,
@@ -150,7 +150,9 @@ export default {
                     configVerify: false,
                     extract: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]},
                     validate: {"apiId": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],"apiId2": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],
-                    variables: {"apiId": [{"expected_status_code": 200}], "apiId2": [{"expected_status_code": 200}]}}
+                    variables: {"apiId": [{"expected_status_code": 200}], "apiId2": [{"expected_status_code": 200}]}},
+                    setupHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"],
+                    teardownHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"]
                 },
             ],
             filterPros: [],
@@ -219,6 +221,5 @@ export default {
 </script>
 
 <style scoped>
-    
 
 </style>

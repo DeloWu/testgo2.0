@@ -60,13 +60,38 @@ export const constantRoutes = [
         hidden: true
     },
     {
+        path: '/env-add',
+        component: () => import('@views/environment/envAddView.vue'),
+        hidden: true
+    },
+    {
+        path: '/env-update',
+        component: () => import('@views/environment/envUpdateView.vue'),
+        hidden: true
+    },
+    {
         path: '/api-index',
         component: () => import('@views/api/apiIndexView.vue'),
         hidden: true
     },
     {
+        path: '/api-add',
+        component: () => import('@views/api/apiAddView.vue'),
+        hidden: true
+    },
+    {
+        path: '/api-update',
+        component: () => import('@views/api/apiUpdateView.vue'),
+        hidden: true
+    },
+    {
         path: '/case-index',
         component: () => import('@views/case/caseIndexView.vue'),
+        hidden: true
+    },
+    {
+        path: '/case-add',
+        component: () => import('@views/case/caseAddView.vue'),
         hidden: true
     },
     {

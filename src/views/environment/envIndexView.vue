@@ -13,7 +13,7 @@
             <br>
             <el-row>
                 <el-col :span="3">
-                    <el-button type="primary" round @click="addEnv">添加环境</el-button>
+                    <router-link to="/env-add"><el-button type="primary" round>添加环境</el-button></router-link>
                 </el-col>
                 <!-- <el-col :span="5"></el-col> -->
                 <el-col :span="4" :offset="11">

@@ -13,16 +13,16 @@
             <br>
             <el-row>
                 <el-col :span="3">
-                    <el-button type="primary" round @click="addApi">添加接口</el-button>
+                    <router-link to="/api-add"><el-button type="primary" round>添加接口</el-button></router-link>
                 </el-col>
                 <!-- <el-col :span="5"></el-col> -->
                 <el-col :span="4" :offset="11">
                     <el-select v-model="filterPros" multiple placeholder="请选择项目">
                         <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </el-col>
@@ -31,9 +31,9 @@
                 </el-col>
                 <el-col :span="4" :offset="0">
                     <el-input
-                      placeholder="请输入内容搜索"
-                      v-model="input"
-                      clearable>
+                        placeholder="请输入内容搜索"
+                        v-model="input"
+                        clearable>
                     </el-input>
                 </el-col>
                 <el-col :span="1">
@@ -49,65 +49,65 @@
                         style="width: 100%"
                         @cell-click="operate">
                         <el-table-column
-                          label="序号"
-                          width="50"
-                          type="index">
+                            label="序号"
+                            width="50"
+                            type="index">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="apiName"
-                          label="接口名称"
-                          width="140">
+                            show-overflow-tooltip
+                            prop="apiName"
+                            label="接口名称"
+                            width="140">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="apiUrl"
-                          label="接口路径"
-                          width="240">
+                            show-overflow-tooltip
+                            prop="apiUrl"
+                            label="接口路径"
+                            width="240">
                         </el-table-column>
                         <el-table-column
-                          prop="apiMethod"
-                          label="请求方式"
-                          width="80">
+                            prop="apiMethod"
+                            label="请求方式"
+                            width="80">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="apiRequestData"
-                          label="请求参数">
+                            show-overflow-tooltip
+                            prop="apiRequestData"
+                            label="请求参数">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="apiDesc"
-                          label="接口描述">
+                            show-overflow-tooltip
+                            prop="apiDesc"
+                            label="接口描述">
                         </el-table-column>
                         <el-table-column
-                          prop="relativePro"
-                          label="所属项目">
+                            prop="relativePro"
+                            label="所属项目">
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="操"
-                          prop="apiIndex"
-                          width="60"
-                          class-name="edit">
-                          <el-button type="success" icon="el-icon-edit" circle ></el-button>
+                            fixed="right"
+                            label="操"
+                            prop="apiIndex"
+                            width="60"
+                            class-name="edit">
+                            <el-button type="success" icon="el-icon-edit" circle ></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="作"
-                          prop="apiIndex"
-                          width="60"
-                          class-name=”delete“>
-                          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                            fixed="right"
+                            label="作"
+                            prop="apiIndex"
+                            width="60"
+                            class-name=”delete“>
+                            <el-button type="danger" icon="el-icon-delete" circle></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label=""
-                          prop="apiIndex"
-                          width="60"
-                          class-name=”run“
-                          @click="dialogVisible = true">
-                          <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
+                            fixed="right"
+                            label=""
+                            prop="apiIndex"
+                            width="60"
+                            class-name=”run“
+                            @click="dialogVisible = true">
+                            <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
                         </el-table-column>
                         <el-table-column label="" width="100" fixed="right"></el-table-column>
                     </el-table>
@@ -117,25 +117,25 @@
         <el-footer height="80px">
             <el-row>
                 <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :page-size="10"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="200">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="200">
                 </el-pagination>
             </el-row>
         </el-footer>
         <el-dialog
-          title="发送请求"
-          :visible.sync="dialogVisible"
-          width="30%">
-          <span>TODO: 设计运行接口样式</span>
-          <span slot="footer" class="dialog-footer">
+            title="发送请求"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <span>TODO: 设计运行接口样式</span>
+            <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">运 行</el-button>
-          </span>
+            </span>
         </el-dialog>
     </el-container>
 </template>
@@ -154,8 +154,10 @@ export default {
                     apiName: "接口一",
                     apiUrl: "http://127.0.0.1:8080/",
                     apiMethod: "get",
+                    apiContentType: "json",
                     apiHeader: {},
-                    apiRequestData: {"foo": "bar"},
+                    apiParams: {"foo": "bar"},
+                    apiPostData: {"foo1": "bar1"},
                     apiDesc: "接口描述一",
                     relativePro: 1,
                     createTime: 1581135254,
@@ -168,8 +170,10 @@ export default {
                     apiName: "接口二",
                     apiUrl: "https://127.0.0.1:443/v1/foo/bar",
                     apiMethod: "post",
+                    apiContentType: "json",
                     apiHeader: {},
-                    apiRequestData: {"foo": "bar"},
+                    apiParams: {"foo": "bar"},
+                    apiPostData: {"foo1": "bar1"},
                     apiDesc: "接口描述二",
                     relativePro: 1,
                     createTime: 1581135254,
@@ -205,21 +209,21 @@ export default {
         },
         confirmDelete() {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
             }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
             }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              });
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
             });
-          },
+        },
         addApi(){
             window.console.log("call add api func");
         },
@@ -244,6 +248,6 @@ export default {
 </script>
 
 <style scoped>
-    
+
 
 </style>

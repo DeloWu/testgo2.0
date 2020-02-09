@@ -18,9 +18,9 @@
                 <el-col :span="14"></el-col>
                 <el-col :span="4" :offset="15">
                     <el-input
-                      placeholder="请输入内容搜索"
-                      v-model="input"
-                      clearable>
+                        placeholder="请输入内容搜索"
+                        v-model="input"
+                        clearable>
                     </el-input>
                 </el-col>
                 <el-col :span="1">
@@ -36,35 +36,35 @@
                         style="width: 100%"
                         @cell-click="operate">
                         <el-table-column
-                          label="序号"
-                          width="80"
-                          type="index">
+                            label="序号"
+                            width="80"
+                            type="index">
                         </el-table-column>
                         <el-table-column
-                          prop="proName"
-                          label="项目名称"
-                          width="250">
+                            prop="proName"
+                            label="项目名称"
+                            width="250">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="proDesc"
-                          label="项目描述">
+                            show-overflow-tooltip
+                            prop="proDesc"
+                            label="项目描述">
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="操作"
-                          prop="proIndex"
-                          width="60"
-                          class-name="edit">
-                          <el-button type="success" icon="el-icon-edit" circle ></el-button>
+                            fixed="right"
+                            label="操作"
+                            prop="proIndex"
+                            width="60"
+                            class-name="edit">
+                            <el-button type="success" icon="el-icon-edit" circle ></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label=""
-                          prop="proIndex"
-                          width="60"
-                          class-name=”delete“>
-                          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                            fixed="right"
+                            label=""
+                            prop="proIndex"
+                            width="60"
+                            class-name=”delete“>
+                            <el-button type="danger" icon="el-icon-delete" circle></el-button>
                         </el-table-column>
                         <el-table-column label="" width="100" fixed="right"></el-table-column>
                     </el-table>
@@ -74,13 +74,13 @@
         <el-footer height="80px">
             <el-row>
                 <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :page-size="10"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="200">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="200">
                 </el-pagination>
             </el-row>
         </el-footer>
@@ -176,21 +176,21 @@ export default {
         },
         confirmDelete() {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+            this.$message({
+                type: 'success',
+                message: '删除成功!'
+            });
         }).catch(() => {
-          this.$message({
+            this.$message({
             type: 'info',
             message: '已取消删除'
-          });
+            });
         });
-      },
+        },
         addPro(){
             window.console.log("call add pro func");
         },
@@ -209,6 +209,6 @@ export default {
 </script>
 
 <style scoped>
-    
+
 
 </style>

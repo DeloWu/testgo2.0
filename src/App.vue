@@ -36,7 +36,7 @@
                   <el-container id="aside-container">
                     <el-aside width="200px">
                         <el-menu style="height: 100%;"
-                          default-active="/pro-index"
+                          :default-openeds="['baseInfo', 'systemSetting']"
                           class="el-menu-vertical-demo"
                           background-color="#545c64"
                           text-color="#fff"
