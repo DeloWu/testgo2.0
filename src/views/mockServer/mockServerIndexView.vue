@@ -19,10 +19,10 @@
                 <el-col :span="4" :offset="11">
                     <el-select v-model="filterPros" multiple placeholder="请选择项目">
                         <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </el-col>
@@ -31,9 +31,9 @@
                 </el-col>
                 <el-col :span="4" :offset="0">
                     <el-input
-                      placeholder="请输入内容搜索"
-                      v-model="input"
-                      clearable>
+                        placeholder="请输入内容搜索"
+                        v-model="input"
+                        clearable>
                     </el-input>
                 </el-col>
                 <el-col :span="1">
@@ -49,84 +49,83 @@
                         style="width: 100%"
                         @cell-click="operate">
                         <el-table-column
-                          label="序号"
-                          width="50"
-                          type="index">
+                            label="序号"
+                            width="50"
+                            type="index">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="mockServerName"
-                          label="mock接口名称"
-                          width="120">
+                            show-overflow-tooltip
+                            prop="mockServerName"
+                            label="mock接口名称"
+                            width="120">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="mockServerUri"
-                          label="接口路径"
-                          width="150">
+                            show-overflow-tooltip
+                            prop="mockServerUri"
+                            label="接口路径"
+                            width="150">
                         </el-table-column>
                         <el-table-column
-                          prop="mockServerMethod"
-                          label="请求方式"
-                          width="80">
+                            prop="mockServerMethod"
+                            label="请求方式"
+                            width="80">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="mockServerRequestData"
-                          label="请求参数">
+                            show-overflow-tooltip
+                            prop="mockServerRequestData"
+                            label="请求参数">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="mockServerResp"
-                          label="默认响应">
+                            show-overflow-tooltip
+                            prop="mockServerResp"
+                            label="默认响应">
                         </el-table-column>
                         <el-table-column
-                          show-overflow-tooltip
-                          prop="mockServerDesc"
-                          label="接口描述">
+                            show-overflow-tooltip
+                            prop="mockServerDesc"
+                            label="接口描述">
                         </el-table-column>
                         <el-table-column
-                          prop="relativePro"
-                          label="所属项目">
+                            prop="relativePro"
+                            label="所属项目">
                         </el-table-column>
                         <el-table-column
-                          
-                          label="mock开关"
-                          width="90"
-                          class-name="switch">
-                          <template slot-scope="scope">
-                            <el-switch
-                              v-model="scope.row.mockServerSwitch"
-                              active-color="#13ce66"
-                              inactive-color="#ff4949"
-                              @change="!scope.row.mockServerSwitch">
-                            </el-switch>
-                          </template>
+                            label="mock开关"
+                            width="90"
+                            class-name="switch">
+                            <template slot-scope="scope">
+                                <el-switch
+                                v-model="scope.row.mockServerSwitch"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949"
+                                @change="!scope.row.mockServerSwitch">
+                                </el-switch>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="操"
-                          prop="apiIndex"
-                          width="60"
-                          class-name="edit">
-                          <el-button type="success" icon="el-icon-edit" circle ></el-button>
+                            fixed="right"
+                            label="操"
+                            prop="apiIndex"
+                            width="60"
+                            class-name="edit">
+                            <el-button type="success" icon="el-icon-edit" circle ></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label="作"
-                          prop="apiIndex"
-                          width="60"
-                          class-name=”delete“>
-                          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                            fixed="right"
+                            label="作"
+                            prop="apiIndex"
+                            width="60"
+                            class-name=”delete“>
+                            <el-button type="danger" icon="el-icon-delete" circle></el-button>
                         </el-table-column>
                         <el-table-column
-                          fixed="right"
-                          label=""
-                          prop="apiIndex"
-                          width="60"
-                          class-name=”run“
-                          @click="dialogVisible = true">
-                          <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
+                            fixed="right"
+                            label=""
+                            prop="apiIndex"
+                            width="60"
+                            class-name=”run“
+                            @click="dialogVisible = true">
+                            <el-button type="primary" icon="el-icon-caret-right" circle ></el-button>
                         </el-table-column>
                         <el-table-column label="" width="100" fixed="right"></el-table-column>
                     </el-table>
@@ -136,25 +135,25 @@
         <el-footer height="80px">
             <el-row>
                 <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :page-size="10"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="200">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="200">
                 </el-pagination>
             </el-row>
         </el-footer>
         <el-dialog
-          title="发送请求"
-          :visible.sync="dialogVisible"
-          width="30%">
-          <span>TODO: 设计运行接口样式</span>
-          <span slot="footer" class="dialog-footer">
+            title="发送请求"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <span>TODO: 设计运行接口样式</span>
+            <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">运 行</el-button>
-          </span>
+            </span>
         </el-dialog>
     </el-container>
 </template>
@@ -222,21 +221,21 @@ export default {
         },
         confirmDelete() {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
             }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
             }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              });
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
             });
-          },
+        },
         addMockServer(){
             window.console.log("call add mock server func");
         },

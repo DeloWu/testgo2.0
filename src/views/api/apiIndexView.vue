@@ -219,8 +219,8 @@ export default {
                 });
             }).catch(() => {
                 this.$message({
-                    type: 'info',
-                    message: '已取消删除'
+                type: 'info',
+                message: '已取消删除'
                 });
             });
         },
@@ -248,6 +248,6 @@ export default {
 </script>
 
 <style scoped>
-
+    
 
 </style>

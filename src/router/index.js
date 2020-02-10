@@ -95,6 +95,11 @@ export const constantRoutes = [
         hidden: true
     },
     {
+        path: '/case-update',
+        component: () => import('@views/case/caseUpdateView.vue'),
+        hidden: true
+    },
+    {
         path: '/suite-index',
         component: () => import('@views/suite/suiteIndexView.vue'),
         hidden: true

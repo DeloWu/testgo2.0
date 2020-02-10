@@ -5,7 +5,7 @@
                 <el-col :span="12">
                     <el-breadcrumb separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>添加用例</el-breadcrumb-item>
+                        <el-breadcrumb-item>编辑用例</el-breadcrumb-item>
                     </el-breadcrumb>
                 </el-col>
                 <el-col :span="12"></el-col>
@@ -142,8 +142,8 @@ export default {
     data() {
         return {
             form: {
-            
-            },
+                
+                },
             apiUrls: [],
             relativePros: [],
             // 可选api类型步骤
@@ -157,7 +157,13 @@ export default {
             // 用于做已选中步骤的map映射 e.g. {"api-1":"apiName1", "case-2":"caseName2"}
             allStepsDict: {},
             // 格式为: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]}
-            stepExtractTableData: []
+            stepExtractTableData: [{
+                stepId: "case-2",
+                extract: JSON.stringify([{"extractName":"extractValue"}, {"session_token":"content.token"}]),
+                validate: JSON.stringify([{"expected_status_code": 200}]),
+                variables: JSON.stringify(["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"])
+                },
+            ]
         }
     },
     methods: {
@@ -200,6 +206,25 @@ export default {
         // 移除指定步骤的httpRunner参数
         removeByIndex(array, removeIndex){
             this.stepExtractTableData = removeInArrayByIndex(array, removeIndex);
+        },
+        // 将form的value值,类型为Object转为String
+        stringifyForm(form){
+            let newForm = {};
+            let key = '';
+            for(key of Object.keys(form)){
+                if(typeof(form[key])=="object"){
+                    newForm[key]=JSON.stringify(form[key]);
+                }else{
+                    newForm[key]=form[key];
+                }
+            }
+            return newForm
+        },
+        // 拼装choicedSteps
+        generatorChoicedSteps(form){
+            for(let step of form.caseSteps){
+                this.choicedSteps.push(Object.values(step)[0] + "-" + Object.keys(step)[0]);
+            }
         }
 
     },
@@ -211,7 +236,26 @@ export default {
         this.apis = [{"1": "apiName1"}, {"3": "apiName2"}, {"5": "apiName3"}];
         this.cases = [{"1": "caseName1"}, {"2": "caseName2"}, {"4": "caseName3"}];
         this.generateAllStep();
-        // this.choicedSteps = [];
+        let originForm = {
+            caseIndex: 11,
+            caseName: "用例一",
+            caseSteps: [{"1":"api"}, {"4":"case"}],
+            relativePro: [11, 22],
+            createTime: 1581135254,
+            modifyTime: 1581135255,
+            caseDesc: "用例描述一",
+            configVariables: [{"expected_status_code": 200}],
+            configBaseUrl: "http://127.0.0.1:5000",
+            configOutput: ["session_token"],
+            configVerify: false,
+            extract: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]},
+            validate: {"apiId": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],"apiId2": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],
+            variables: {"apiId": [{"expected_status_code": 200}], "apiId2": [{"expected_status_code": 200}]}},
+            setupHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"],
+            teardownHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"]
+        };
+        this.form = this.stringifyForm(originForm);
+        this.generatorChoicedSteps(originForm);
     }
 }
 </script>
