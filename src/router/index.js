@@ -105,6 +105,16 @@ export const constantRoutes = [
         hidden: true
     },
     {
+        path: '/suite-add',
+        component: () => import('@views/suite/suiteAddView.vue'),
+        hidden: true
+    },
+    {
+        path: '/suite-update',
+        component: () => import('@views/suite/suiteUpdateView.vue'),
+        hidden: true
+    },
+    {
         path: '/report-index',
         component: () => import('@views/report/reportIndexView.vue'),
         hidden: true

@@ -5,7 +5,7 @@
                 <el-col :span="12">
                     <el-breadcrumb separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>编辑用例</el-breadcrumb-item>
+                        <el-breadcrumb-item>添加用例集</el-breadcrumb-item>
                     </el-breadcrumb>
                 </el-col>
                 <el-col :span="12"></el-col>
@@ -15,7 +15,7 @@
                 <el-col :span="24">
                     <el-form ref="form" :model="form" label-width="100px" label-position="top" size="mini">
                         <p>公共配置:</p>
-                        <el-form-item  label="httpRunner-public-url:" required>
+                        <el-form-item  label="httpRunner-public-url:">
                             <el-select
                                 v-model="form.configBaseUrl"
                                 filterable
@@ -34,19 +34,10 @@
                         <el-form-item label="httpRunner-public-variables:" style="width:600px;">
                             <el-input type="textarea" v-model="form.configVariables" placeholder='请输入正确格式,e.g. [{"expected_status_code": 200}, {"foo":"bar"}]'></el-input>
                         </el-form-item>
-                        <el-form-item label="httpRunner-public-output:" style="width:600px;">
-                            <el-input type="textarea" v-model="form.configOutput" placeholder='请输入正确格式,e.g. ["session_token"]'></el-input>
-                        </el-form-item>
-                        <el-form-item label="httpRunner-public-setup_hooks:" style="width:600px;">
-                            <el-input type="textarea" v-model="form.setupHooks" placeholder='请输入正确格式, e.g. ["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"]'></el-input>
-                        </el-form-item>
-                        <el-form-item label="httpRunner-public-teardown_hooks:" style="width:600px;">
-                            <el-input type="textarea" v-model="form.teardownHooks" placeholder='请输入正确格式, e.g. ["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"]'></el-input>
-                        </el-form-item>
                         <el-divider></el-divider>
                         <p>私有配置:</p>
-                        <el-form-item label="用例名称:" required style="width:600px;">
-                            <el-input v-model="form.caseName"></el-input>
+                        <el-form-item label="用例集名称:" required style="width:600px;">
+                            <el-input v-model="form.suiteName"></el-input>
                         </el-form-item>
                         <!-- <el-form-item label="httpRunner-variables:">
                             <el-input type="textarea" v-model="form.variables" placeholder='请输入正确格式,e.g. [{"expected_status_code": 200}, {"foo":"bar"}]'></el-input>
@@ -55,16 +46,16 @@
                         <el-form-item label="httpRunner-validate:">
                             <el-input type="textarea" v-model="form.validate" placeholder='请输入正确格式, e.g. [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]]'></el-input>
                         </el-form-item> -->
-                        <el-form-item label="拼装用例步骤:" required>
+                        <el-form-item label="拼装用例集:" required>
                             <el-transfer
                                 filterable
                                 filter-placeholder="请输入关键字搜索"
                                 v-model="choicedSteps"
                                 :data="allSteps"
-                                :titles="['可选步骤', '当前用例步骤']">
+                                :titles="['可选用例', '当前用例集合']">
                             </el-transfer>
                         </el-form-item>
-                        <el-form-item label="指定步骤添加:extract / validate / variables">
+                        <el-form-item label="指定步骤添加:variables / parameters">
                             <el-button type="primary" @click="addExtract">添加</el-button>
                             <div id="stepZone">
                                 <el-row>
@@ -74,7 +65,7 @@
                                         width="100%"
                                         :data="stepExtractTableData">
                                             <el-table-column
-                                                label="已选中步骤"
+                                                label="已选中用例"
                                                 width="180">
                                                 <template slot-scope="scope">
                                                     <el-select v-model="stepExtractTableData[scope.$index]['stepId']" placeholder="请选择">
@@ -95,17 +86,10 @@
                                                 </template>
                                             </el-table-column>
                                             <el-table-column
-                                                label="extract内容"
+                                                label="parameters内容"
                                                 width="250">
                                                 <template slot-scope="scope">
-                                                    <el-input type="textarea" v-model="scope.row.extract"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column
-                                                label="validate内容"
-                                                width="250">
-                                                <template slot-scope="scope">
-                                                    <el-input type="textarea" v-model="scope.row.validate"></el-input>
+                                                    <el-input type="textarea" v-model="scope.row.parameters"></el-input>
                                                 </template>
                                             </el-table-column>
                                             <el-table-column
@@ -142,8 +126,8 @@ export default {
     data() {
         return {
             form: {
-                
-                },
+            
+            },
             apiUrls: [],
             relativePros: [],
             // 可选api类型步骤
@@ -156,13 +140,8 @@ export default {
             choicedSteps: [],
             // 用于做已选中步骤的map映射 e.g. {"api-1":"apiName1", "case-2":"caseName2"}
             allStepsDict: {},
-            stepExtractTableData: [{
-                stepId: "case-2",
-                extract: JSON.stringify([{"extractName":"extractValue"}, {"session_token":"content.token"}]),
-                validate: JSON.stringify([{"expected_status_code": 200}]),
-                variables: JSON.stringify(["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"])
-                },
-            ]
+            // 格式为: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]}
+            stepExtractTableData: []
         }
     },
     methods: {
@@ -177,15 +156,6 @@ export default {
         },
         // 根据this.apis / this.steps 生成transfer的可选步骤 data
         generateAllStep(){
-            this.apis.forEach((item, index) => {
-                let cur_item_key = "api-" +Object.keys(item)[0];
-                let cur_item_value = "接口-" + item[Object.keys(item)[0]];
-                this.allSteps.push({
-                    label: cur_item_value,
-                    key: cur_item_key
-                });
-                this.allStepsDict[cur_item_key]=cur_item_value;
-            });
             this.cases.forEach((item, index) => {
                 let cur_item_key = "case-" + Object.keys(item)[0];
                 let cur_item_value = "用例-" + item[Object.keys(item)[0]];
@@ -205,25 +175,6 @@ export default {
         // 移除指定步骤的httpRunner参数
         removeByIndex(array, removeIndex){
             this.stepExtractTableData = removeInArrayByIndex(array, removeIndex);
-        },
-        // 将form的value值,类型为Object转为String
-        stringifyForm(form){
-            let newForm = {};
-            let key = '';
-            for(key of Object.keys(form)){
-                if(typeof(form[key])=="object"){
-                    newForm[key]=JSON.stringify(form[key]);
-                }else{
-                    newForm[key]=form[key];
-                }
-            }
-            return newForm
-        },
-        // 拼装choicedSteps
-        generatorChoicedSteps(form){
-            for(let step of form.caseSteps){
-                this.choicedSteps.push(Object.values(step)[0] + "-" + Object.keys(step)[0]);
-            }
         }
 
     },
@@ -235,27 +186,7 @@ export default {
         this.apis = [{"1": "apiName1"}, {"3": "apiName2"}, {"5": "apiName3"}];
         this.cases = [{"1": "caseName1"}, {"2": "caseName2"}, {"4": "caseName3"}];
         this.generateAllStep();
-        let originForm = {
-            caseIndex: 11,
-            caseName: "用例一",
-            caseSteps: [{"1":"api"}, {"4":"case"}],
-            relativePro: [11, 22],
-            createTime: 1581135254,
-            modifyTime: 1581135255,
-            caseDesc: "用例描述一",
-            configVariables: [{"expected_status_code": 200}],
-            configBaseUrl: "http://127.0.0.1:5000",
-            configOutput: ["session_token"],
-            configVerify: false,
-            extract: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]},
-            validate: {"apiId": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],"apiId2": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],
-            variables: {"apiId": [{"expected_status_code": 200}], "apiId2": [{"expected_status_code": 200}]}},
-            setupHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"],
-            teardownHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"]
-        };
-        // TODO: 转化 originForm => stepExtractTableData
-        this.form = this.stringifyForm(originForm);
-        this.generatorChoicedSteps(originForm);
+        // this.choicedSteps = [];
     }
 }
 </script>
