@@ -21,15 +21,3 @@ func main(){
 
   s.ListenAndServe()
 }
-//import "fmt"
-//
-//func main(){
-//   var peopleSlice *People
-//   peopleSlice = new(People)
-//   fmt.Println(peopleSlice)
-//   fmt.Println(*peopleSlice)
-//}
-//
-//type People struct {
-//   Name string
-//}

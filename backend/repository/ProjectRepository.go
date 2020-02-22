@@ -1,9 +1,9 @@
 package repository
 
 import (
-    "log"
-    //"gopkg.in/mgo.v2/bson"
+    "gopkg.in/mgo.v2/bson"
     "testgo/common/datasource"
+    "testgo/common/logger"
     "testgo/models"
     "time"
 )
@@ -11,74 +11,76 @@ import (
 //依赖注入
 type ProjectRepository struct {
     Source datasource.IDb `inject:""`
+    Log logger.ILogger `inject:""`
     Base BaseRepository `inject:"inline"`
 }
 
 //分页获取projects
-func (p *ProjectRepository) GetProjectsByPagination(maps map[string]interface{}, pageIndex int, pageSize int) *[]models.Project{
-    var projects []models.Project
-    err := p.Base.FindByPagination("project", maps, projects, pageIndex, pageSize)
-    if err != nil{
+func (p *ProjectRepository) GetProjectsByPagination(maps interface{}, pageIndex int, pageSize int) (*[]models.Project, error) {
+    var result []models.Project
+    err := p.Base.FindByPagination("project", maps, &result, pageIndex, pageSize)
+    if err != nil {
         p.Base.Log.Error(err)
+        return nil, err
     }
-    //debug
-    log.Println("**************************************")
-    log.Println(projects)
-    log.Println("**************************************")
-    return &projects
+    return &result, err
 }
 
 //根据id获取单个project
-func (p *ProjectRepository) GetProjectById(id string) models.Project{
-    var project models.Project
-    err := p.Base.FindById("project", id, project)
+func (p *ProjectRepository) GetProjectById(id string) (*models.Project, error) {
+    var result models.Project
+    err := p.Base.FindById("project", id, &result)
     if err != nil{
         p.Base.Log.Error(err)
+        return nil, err
     }
-    return project
+    return &result, err
 }
 
 //新增单个Project
-func (p *ProjectRepository) AddProject(project models.Project) bool {
+func (p *ProjectRepository) AddProject(project models.Project) error {
+    project.ID = bson.NewObjectId()
     project.CreateTime = time.Now().Unix()
     project.UpdateTime = time.Now().Unix()
     err := p.Base.Insert("project", project)
     if err != nil {
         p.Base.Log.Error(err)
-        return false
+        return err
     }
-    return true
+    return nil
 }
 
 //编辑单个project
-func (p *ProjectRepository) EditProject(project models.Project) bool {
-    idSelector := map[string]interface{}{
-        "_id": project.ID,
+func (p *ProjectRepository) EditProject(updatedProject models.Project) error {
+    objectId := bson.ObjectIdHex(string(updatedProject.ID))
+    idSelector := bson.M{
+        "_id": objectId,
     }
-    err := p.Base.Update("project", idSelector, project)
+    updatedProject.UpdateTime = time.Now().Unix()
+    err := p.Base.Update("project", idSelector, updatedProject)
     if err != nil {
         p.Base.Log.Error(err)
-        return false
+        return err
     }
-    return true
+    return nil
 }
 
 //删除单个project
-func (p *ProjectRepository) DeleteProjectById(id interface{}) bool {
+func (p *ProjectRepository) DeleteProjectById(id string) error {
     err := p.Base.DeleteById("project", id)
     if err != nil {
         p.Base.Log.Error(err)
-        return false
+        return err
     }
-    return true
+    return nil
 }
 
 //获取总数
-func (p *ProjectRepository) GetProjectCount(maps map[string]interface{}) int {
+func (p *ProjectRepository) GetProjectCounts(maps interface{}) (int, error) {
     num, err := p.Base.Count("project", maps)
     if err != nil {
         p.Base.Log.Error(err)
-        return 0
+        return 0, err
     }
-    return num
+    return num, nil
 }

@@ -6,20 +6,20 @@ import (
 
 type IProjectRepository interface {
     //分页返回Projects
-    GetProjectsByPagination(maps map[string]interface{}, pageIndex int, pageSize int) *[]models.Project
+    GetProjectsByPagination(maps interface{}, pageIndex int, pageSize int) (*[]models.Project, error)
     //根据ID获取project
-    GetProjectById(id string) models.Project
+    GetProjectById(id string) (*models.Project, error)
     //根据条件获取多个projects
-    //GetProjects(maps map[string]interface{}) *[]models.Project
+    //GetProjects(maps interface{}) *[]models.Project
     //根据条件获取单个project
-    //GetProject(maps map[string]interface{}) *models.Project
+    //GetProject(maps interface{}) *models.Project
     //新增project
-    AddProject(project models.Project) bool
+    AddProject(project models.Project) error
     //编辑project
-    EditProject(project models.Project) bool
+    EditProject(updatedProject models.Project) error
     //删除project
-    DeleteProjectById(id interface{}) bool
+    DeleteProjectById(id string) error
     //获取所有projects数量
-    GetProjectCount(maps map[string]interface{}) int
+    GetProjectCounts(maps interface{}) (int, error)
 
 }

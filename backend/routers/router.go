@@ -36,14 +36,18 @@ func Configure(r *gin.Engine) {
     //Injection
     var injector inject.Graph
     err := injector.Provide(
+        &inject.Object{Value: &project},
         &inject.Object{Value: &db},
         &inject.Object{Value: &zap},
         //&inject.Object{Value: &myjwt},
-        &inject.Object{Value: &repository.BaseRepository{}},
-        &inject.Object{Value: &project},
-        &inject.Object{Value: &service.ProjectService{}},
         &inject.Object{Value: &repository.ProjectRepository{}},
+        &inject.Object{Value: &service.ProjectService{}},
+        &inject.Object{Value: &repository.BaseRepository{}},
+
     )
+    if err != nil {
+        log.Fatal("inject fatal: ", err)
+    }
     //zap log init
     zap.Init()
     //database connect
@@ -51,15 +55,22 @@ func Configure(r *gin.Engine) {
     if err != nil {
         log.Fatal("db fatal:", err)
     }
+
+    if err := injector.Populate(); err != nil {
+        log.Fatal("injector fatal: ", err)
+    }
+
     //var authMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AllUserAuthorizator)
     //r.NoRoute(authMiddleware.MiddlewareFunc(), jwt.NoRouteHandler)
     //r.POST("/login", authMiddleware.LoginHandler)
-    apiV1 := r.Group("/api/v1")
+    apiV1Group := r.Group("/api/v1")
     {
-        apiV1.GET("/project", project.GetProjectById)
-        apiV1.GET("/projects", project.GetProjectsByPagination)
+        apiV1Group.GET("/project", project.GetProjectById)
+        apiV1Group.GET("/projects", project.GetProjectsByPagination)
 
         //调试试验
-        apiV1.GET("/mockdata", controller.MockData)
+        apiV1Group.GET("/mockdata", controller.MockData)
+        apiV1Group.GET("/finddb", controller.FindDb)
+        apiV1Group.GET("/finddb1", controller.FindDb1)
     }
 }

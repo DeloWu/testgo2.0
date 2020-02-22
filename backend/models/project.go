@@ -2,7 +2,7 @@ package models
 
 //项目表
 type Project struct {
-    BaseModel
+    BaseModel   `bson:",inline"`
     //项目名称
     ProName string `bson:"proName" json:"proName"`
     //项目描述

@@ -13,7 +13,7 @@ type BaseRepository struct {
 }
 
 //获取第一条数据,默认按照createTime升序排序
-func (b *BaseRepository) First(colName string, maps map[string]interface{}, result interface{}, orders ...string) error{
+func (b *BaseRepository) First(colName string, maps interface{}, result interface{}, orders ...string) (error){
     //Sort 默认升序, -field 为相反，即为降序
     err := b.Source.DB().Session.Ping()
     if err != nil{
@@ -38,7 +38,7 @@ func (b *BaseRepository) First(colName string, maps map[string]interface{}, resu
 }
 
 //获取最后一条数据,按照createTime升序排序
-func (b *BaseRepository) Last(colName string, maps map[string]interface{}, result interface{}, orders ...string) error{
+func (b *BaseRepository) Last(colName string, maps interface{}, result interface{}, orders ...string) (error){
     //Sort 默认升序, -field 为相反，即为降序
     err := b.Source.DB().Session.Ping()
     if err != nil{
@@ -62,7 +62,7 @@ func (b *BaseRepository) Last(colName string, maps map[string]interface{}, resul
 }
 
 //默认顺序获取一条数据
-func (b *BaseRepository) FindOne(colName string, maps map[string]interface{}, result interface{}) error{
+func (b *BaseRepository) FindOne(colName string, maps interface{}, result interface{}) (error){
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
@@ -77,14 +77,13 @@ func (b *BaseRepository) FindOne(colName string, maps map[string]interface{}, re
 }
 
 //根据id获取一条数据
-func (b *BaseRepository) FindById(colName string, id string, result interface{}) error{
+func (b *BaseRepository) FindById(colName string, id string, result interface{}) (error){
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
         return err
     }
-    objectId := bson.ObjectIdHex(id)
-    err = b.Source.DB().C(colName).FindId(objectId).One(&result)
+    err = b.Source.DB().C(colName).FindId(bson.ObjectIdHex(id)).One(result)
     if err != nil{
         b.Log.Error(err)
         return err
@@ -93,20 +92,20 @@ func (b *BaseRepository) FindById(colName string, id string, result interface{})
 }
 
 //获取所有数据
-func (b *BaseRepository) FindAll(colName string, maps map[string]interface{}, result interface{}, orders ...string) error{
+func (b *BaseRepository) FindAll(colName string, maps interface{}, result interface{}, orders ...string) (error){
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
         return err
     }
-    if len(orders) >= 1{
+    if len(orders) == 0{
+        err = b.Source.DB().C(colName).Find(maps).All(&result)
+    }else {
         tempQuery := b.Source.DB().C(colName).Find(maps)
         for _, field := range orders{
             tempQuery = tempQuery.Sort(field)
         }
         err = tempQuery.All(&result)
-    }else {
-        err = b.Source.DB().C(colName).Find(maps).All(&result)
     }
     if err != nil{
         b.Log.Error(err)
@@ -116,7 +115,7 @@ func (b *BaseRepository) FindAll(colName string, maps map[string]interface{}, re
 }
 
 //获取总数
-func (b *BaseRepository) Count(colName string, maps map[string]interface{}) (int, error){
+func (b *BaseRepository) Count(colName string, maps interface{}) (int, error){
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
@@ -127,7 +126,7 @@ func (b *BaseRepository) Count(colName string, maps map[string]interface{}) (int
 }
 
 //分页查询
-func (b *BaseRepository) FindByPagination(colName string, maps map[string]interface{}, result interface{}, pageIndex int, pageSize int, orders ...string) error{
+func (b *BaseRepository) FindByPagination(colName string, maps interface{}, result interface{}, pageIndex int, pageSize int, orders ...string) (error){
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
@@ -141,16 +140,11 @@ func (b *BaseRepository) FindByPagination(colName string, maps map[string]interf
             tempQuery = tempQuery.Sort(field)
         }
     }
-    err = tempQuery.Skip((pageIndex -1) * pageSize).Limit(pageSize).All(&result)
+    err = tempQuery.Skip((pageIndex -1) * pageSize).Limit(pageSize).All(result)
     if err != nil{
         b.Log.Error(err)
         return err
     }
-    //debug
-    b.Log.Info("--------------------------------")
-    b.Log.Info(result)
-    b.Log.Info("--------------------------------")
-    b.Log.Info(&result)
     return nil
 }
 
@@ -174,7 +168,7 @@ func (b *BaseRepository) Insert(colName string, docs ...interface{}) error{
 }
 
 //更新一条数据
-func (b *BaseRepository) Update(colName string, selector map[string]interface{}, update interface{}) error{
+func (b *BaseRepository) Update(colName string, selector interface{}, update interface{}) error{
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
@@ -189,7 +183,7 @@ func (b *BaseRepository) Update(colName string, selector map[string]interface{},
 }
 
 //更新多条数据
-func (b *BaseRepository) UpdateAll(colName string, selector map[string]interface{}, update interface{}) error{
+func (b *BaseRepository) UpdateAll(colName string, selector interface{}, update interface{}) error{
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
@@ -204,7 +198,7 @@ func (b *BaseRepository) UpdateAll(colName string, selector map[string]interface
 }
 
 //删除一条数据
-func (b *BaseRepository) Delete(colName string, selector map[string]interface{}) error{
+func (b *BaseRepository) Delete(colName string, selector interface{}) error{
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
@@ -219,14 +213,13 @@ func (b *BaseRepository) Delete(colName string, selector map[string]interface{})
 }
 
 //根据id获取一条数据
-func (b *BaseRepository) DeleteById(colName string, id interface{}) error{
+func (b *BaseRepository) DeleteById(colName string, id string) error{
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)
         return err
     }
-    //objectId := bson.ObjectIdHex(id)
-    err = b.Source.DB().C(colName).RemoveId(id)
+    err = b.Source.DB().C(colName).RemoveId(bson.ObjectIdHex(id))
     if err != nil{
         b.Log.Error(err)
         return err
@@ -235,7 +228,7 @@ func (b *BaseRepository) DeleteById(colName string, id interface{}) error{
 }
 
 //删除多条数据
-func (b *BaseRepository) DeleteAll(colName string, selector map[string]interface{}) error{
+func (b *BaseRepository) DeleteAll(colName string, selector interface{}) error{
     err := b.Source.DB().Session.Ping()
     if err != nil{
         b.Log.Errorf("数据库连接失败: %v", err)

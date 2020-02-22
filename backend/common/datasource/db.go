@@ -1,9 +1,8 @@
 package datasource
 
 import (
-    "log"
-    "testgo/common/setting"
     "gopkg.in/mgo.v2"
+    "log"
     //"gopkg.in/mgo.v2/bson"
 )
 
@@ -13,15 +12,20 @@ type Db struct {
 
 //Connect 初始化数据库配置
 func(d *Db) Connect() error {
-    conf := setting.Config.Database
-    dbHost := conf.Host
-    dbName := conf.Name
-    session, err := mgo.Dial(dbHost)
+    //conf := setting.Config.Database
+    //dbHost := conf.Host
+    //dbName := conf.Name
+    //session, err := mgo.Dial(dbHost)
+    session, err := mgo.Dial("127.0.0.1:27017")
+    //mgo.SetDebug(true)
+    //mgo.SetLogger()
     if err != nil{
         panic(err)
     }
     session.SetMode(mgo.Monotonic, true)
-    d.Conn = session.DB(dbName)
+    //d.Conn = session.DB(dbName)
+    d.Conn = session.DB("testgo")
+
     log.Println("Connect Mongodb Success")
     return nil
 }

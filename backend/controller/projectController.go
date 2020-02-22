@@ -2,6 +2,7 @@ package controller
 
 import (
     "github.com/astaxie/beego/validation"
+    "gopkg.in/mgo.v2/bson"
     "log"
 
     //"log"
@@ -14,6 +15,9 @@ import (
     "github.com/gin-gonic/gin"
     //"gopkg.in/mgo.v2/bson"
     "testgo/service"
+    //debug
+    "gopkg.in/mgo.v2"
+    "testgo/common/datasource"
 
 )
 
@@ -24,7 +28,6 @@ type Project struct {
 
 //根据ID获取project
 func (p *Project) GetProjectById(c *gin.Context) {
-    var viewProject models.Project
     valid := validation.Validation{}
     id := c.Query("id")
     valid.Required(id, "id")
@@ -35,15 +38,12 @@ func (p *Project) GetProjectById(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    //id = bson.ObjectIdHex(id)
-    viewProject = p.Service.GetProjectById(id)
+    result := p.Service.GetProjectById(id)
     code := codes.SUCCESS
-    RespData(c, http.StatusOK, code, &viewProject)
+    RespData(c, http.StatusOK, code, result)
 }
 
 func (p *Project) GetProjectsByPagination(c *gin.Context) {
-    var viewProjects *[]models.Project
-    viewProjects = new([]models.Project)
     valid := validation.Validation{}
     pageIndex, pageSize := GetPage(c)
     if valid.HasErrors() {
@@ -53,32 +53,67 @@ func (p *Project) GetProjectsByPagination(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    log.Println("===============================")
-    log.Println(viewProjects)
-    log.Println("===============================")
-    log.Println(*viewProjects)
-    log.Println("===============================")
-
-    log.Println("===============================")
-    log.Println("pageIndex:", pageIndex, "  pageSize:", pageSize)
-    log.Println("===============================")
-
-    viewProjects = p.Service.GetProjectsByPagination(pageIndex, pageSize)
-    //viewProjects := map[string]string{"foo": "bar"}
-    log.Println("===============================")
-    log.Println(viewProjects)
-    log.Println("===============================")
-    log.Println(*viewProjects)
-    log.Println("===============================")
+    result := p.Service.GetProjectsByPagination(pageIndex, pageSize)
     code := codes.SUCCESS
-    RespData(c, http.StatusOK, code, viewProjects)
+    RespData(c, http.StatusOK, code, result)
 
 }
 
 //调试使用
 func MockData(c *gin.Context) {
+    var db datasource.Db
+    var project models.Project
+    log.Printf("%+v", db.Conn)
+    //db.DB().C("project").Find(bson.M{}).One(&project)
+    log.Printf("%+v", project)
     c.JSON(200, gin.H{
-        "BlogL": "www.hello.com",
-        "wechat": "myWechat",
+        "data": project,
+    })
+}
+
+//debug
+func FindDb(c *gin.Context) {
+    log.Println("find db func start")
+    var result models.Project
+    session, err := mgo.Dial("127.0.0.1:27017")
+    if err != nil{
+        panic(err)
+    }
+    defer session.Close()
+    session.SetMode(mgo.Monotonic, true)
+    Conn := session.DB("testgo")
+    log.Println("Connect Mongodb Success")
+    err = Conn.C("project").Find(nil).One(&result)
+    if err != nil{
+        panic(err)
+    }
+    log.Println("find db finish, result is:")
+    log.Printf("%+v", result)
+    c.JSON(200, gin.H{
+        "data": result,
+    })
+}
+
+//debug
+func FindDb1(c *gin.Context) {
+    log.Println("find db func start")
+    var result models.Project
+    session, err := mgo.Dial("127.0.0.1:27017")
+    if err != nil{
+        panic(err)
+    }
+    defer session.Close()
+    session.SetMode(mgo.Monotonic, true)
+    Conn := session.DB("testgo")
+    log.Println("Connect Mongodb Success")
+    id := c.Query("id")
+    err = Conn.C("project").FindId(bson.ObjectIdHex(id)).One(&result)
+    if err != nil{
+        panic(err)
+    }
+    log.Println("find db finish, result is:")
+    log.Printf("%+v", result)
+    c.JSON(200, gin.H{
+        "data": result,
     })
 }

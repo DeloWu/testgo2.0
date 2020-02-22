@@ -1,6 +1,7 @@
 package service
 
 import (
+    "gopkg.in/mgo.v2/bson"
     "testgo/models"
     "testgo/repository"
 )
@@ -11,32 +12,44 @@ type ProjectService struct {
 }
 
 //根据ID获取project
-func (p *ProjectService) GetProjectById(id string) models.Project{
-    return p.Repository.GetProjectById(id)
+func (p *ProjectService) GetProjectById(id string) *models.Project{
+     result, err := p.Repository.GetProjectById(id)
+     if err != nil{
+         return nil
+     }
+     return result
 }
 
 //获取分页数据
 func (p *ProjectService) GetProjectsByPagination(pageIndex int, pageSize int) *[]models.Project{
-    maps := map[string]interface{}{}
-    return p.Repository.GetProjectsByPagination(maps, pageIndex, pageSize)
+    maps := bson.M{}
+    result, err := p.Repository.GetProjectsByPagination(maps, pageIndex, pageSize)
+    if err != nil{
+        return nil
+    }
+    return result
 }
 
 //获取总数
-func (p *ProjectService) GetProjectsCount(maps map[string]interface{}) int{
-    return p.Repository.GetProjectCount(maps)
+func (p *ProjectService) GetProjectsCounts(maps interface{}) int{
+    counts, err := p.Repository.GetProjectCounts(maps)
+    if err != nil{
+        return 0
+    }
+    return counts
 }
 
 //新增project
-func (p *ProjectService) AddProject(project models.Project) bool {
+func (p *ProjectService) AddProject(project models.Project) error {
     return p.Repository.AddProject(project)
 }
 
 //编辑单个project
-func (p *ProjectService) EditProject(project models.Project) bool{
-    return p.Repository.EditProject(project)
+func (p *ProjectService) EditProject(updatedProject models.Project) error{
+    return p.Repository.EditProject(updatedProject)
 }
 
 //删除单个project
-func (p *ProjectService) DeleteProjectById(id interface{}) bool{
-    return p.DeleteProjectById(id)
+func (p *ProjectService) DeleteProjectById(id string) error{
+    return p.Repository.DeleteProjectById(id)
 }
