@@ -15,10 +15,6 @@ import (
     "github.com/gin-gonic/gin"
     //"gopkg.in/mgo.v2/bson"
     "testgo/service"
-    //debug
-    "gopkg.in/mgo.v2"
-    "testgo/common/datasource"
-
 )
 
 //依赖注入
@@ -29,7 +25,7 @@ type Project struct {
 //根据ID获取project
 func (p *Project) GetProjectById(c *gin.Context) {
     valid := validation.Validation{}
-    id := c.Query("id")
+    id := c.Param("id")
     valid.Required(id, "id")
     if valid.HasErrors() {
         // 如果有错误信息，证明验证没通过
@@ -56,64 +52,83 @@ func (p *Project) GetProjectsByPagination(c *gin.Context) {
     result := p.Service.GetProjectsByPagination(pageIndex, pageSize)
     code := codes.SUCCESS
     RespData(c, http.StatusOK, code, result)
-
 }
 
-//调试使用
-func MockData(c *gin.Context) {
-    var db datasource.Db
+func (p *Project) GetProjectsCounts(c *gin.Context) {
+    counts := p.Service.GetProjectsCounts(bson.M{})
+    result := bson.M{"total": counts}
+    code := codes.SUCCESS
+    RespData(c, http.StatusOK, code, result)
+}
+
+func (p *Project) AddProject(c *gin.Context) {
+    valid := validation.Validation{}
     var project models.Project
-    log.Printf("%+v", db.Conn)
-    //db.DB().C("project").Find(bson.M{}).One(&project)
-    log.Printf("%+v", project)
-    c.JSON(200, gin.H{
-        "data": project,
-    })
+    if err := c.BindJSON(&project); err != nil{
+        log.Println(err)
+        code := codes.InvalidParams
+        RespData(c, http.StatusOK, code, nil)
+    }
+    if valid.HasErrors() {
+        // 如果有错误信息，证明验证没通过
+        // 打印错误信息
+        for _, err := range valid.Errors {
+            log.Println(err.Key, err.Message)
+        }
+    }
+    err := p.Service.AddProject(project)
+    if err != nil {
+        log.Println(err)
+        code := codes.InvalidParams
+        RespData(c, http.StatusOK, code, nil)
+    }
+    code := codes.SUCCESS
+    RespData(c, http.StatusOK, code, nil)
 }
 
-//debug
-func FindDb(c *gin.Context) {
-    log.Println("find db func start")
-    var result models.Project
-    session, err := mgo.Dial("127.0.0.1:27017")
-    if err != nil{
-        panic(err)
+func (p *Project) EditProject(c *gin.Context) {
+    valid := validation.Validation{}
+    var project models.Project
+    if err := c.BindJSON(&project); err != nil{
+        log.Println(err)
+        code := codes.InvalidParams
+        RespData(c, http.StatusOK, code, nil)
     }
-    defer session.Close()
-    session.SetMode(mgo.Monotonic, true)
-    Conn := session.DB("testgo")
-    log.Println("Connect Mongodb Success")
-    err = Conn.C("project").Find(nil).One(&result)
-    if err != nil{
-        panic(err)
+    if valid.HasErrors() {
+        // 如果有错误信息，证明验证没通过
+        // 打印错误信息
+        for _, err := range valid.Errors {
+            log.Println(err.Key, err.Message)
+        }
     }
-    log.Println("find db finish, result is:")
-    log.Printf("%+v", result)
-    c.JSON(200, gin.H{
-        "data": result,
-    })
+    err := p.Service.EditProject(project)
+    if err != nil {
+        log.Println(err)
+        code := codes.InvalidParams
+        RespData(c, http.StatusOK, code, nil)
+    }
+    code := codes.SUCCESS
+    RespData(c, http.StatusOK, code, nil)
 }
 
-//debug
-func FindDb1(c *gin.Context) {
-    log.Println("find db func start")
-    var result models.Project
-    session, err := mgo.Dial("127.0.0.1:27017")
-    if err != nil{
-        panic(err)
+func (p *Project) DeleteProjectById(c *gin.Context) {
+    valid := validation.Validation{}
+    id := c.Param("id")
+    valid.Required(id, "id")
+    if valid.HasErrors() {
+        // 如果有错误信息，证明验证没通过
+        // 打印错误信息
+        for _, err := range valid.Errors {
+            log.Println(err.Key, err.Message)
+        }
     }
-    defer session.Close()
-    session.SetMode(mgo.Monotonic, true)
-    Conn := session.DB("testgo")
-    log.Println("Connect Mongodb Success")
-    id := c.Query("id")
-    err = Conn.C("project").FindId(bson.ObjectIdHex(id)).One(&result)
-    if err != nil{
-        panic(err)
+    err := p.Service.DeleteProjectById(id)
+    if err != nil {
+        log.Println(err)
+        code := codes.InvalidParams
+        RespData(c, http.StatusOK, code, nil)
     }
-    log.Println("find db finish, result is:")
-    log.Printf("%+v", result)
-    c.JSON(200, gin.H{
-        "data": result,
-    })
+    code := codes.SUCCESS
+    RespData(c, http.StatusOK, code, nil)
 }
+

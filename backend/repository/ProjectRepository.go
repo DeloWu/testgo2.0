@@ -52,9 +52,8 @@ func (p *ProjectRepository) AddProject(project models.Project) error {
 
 //编辑单个project
 func (p *ProjectRepository) EditProject(updatedProject models.Project) error {
-    objectId := bson.ObjectIdHex(string(updatedProject.ID))
     idSelector := bson.M{
-        "_id": objectId,
+        "_id": updatedProject.ID,
     }
     updatedProject.UpdateTime = time.Now().Unix()
     err := p.Base.Update("project", idSelector, updatedProject)

@@ -59,18 +59,22 @@ func Configure(r *gin.Engine) {
     if err := injector.Populate(); err != nil {
         log.Fatal("injector fatal: ", err)
     }
-
     //var authMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AllUserAuthorizator)
     //r.NoRoute(authMiddleware.MiddlewareFunc(), jwt.NoRouteHandler)
     //r.POST("/login", authMiddleware.LoginHandler)
     apiV1Group := r.Group("/api/v1")
     {
-        apiV1Group.GET("/project", project.GetProjectById)
+        //查询projects总数
+        apiV1Group.GET("/project-total", project.GetProjectsCounts)
+        //查询单个project详情
+        apiV1Group.GET("/project/:id", project.GetProjectById)
+        //分页查询
         apiV1Group.GET("/projects", project.GetProjectsByPagination)
-
-        //调试试验
-        apiV1Group.GET("/mockdata", controller.MockData)
-        apiV1Group.GET("/finddb", controller.FindDb)
-        apiV1Group.GET("/finddb1", controller.FindDb1)
+        //新增
+        apiV1Group.POST("/project", project.AddProject)
+        //更新
+        apiV1Group.PUT("/project", project.EditProject)
+        //删除
+        apiV1Group.DELETE("/project/:id", project.DeleteProjectById)
     }
 }
