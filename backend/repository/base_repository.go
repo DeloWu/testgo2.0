@@ -241,3 +241,8 @@ func (b *BaseRepository) DeleteAll(colName string, selector interface{}) error{
     }
     return nil
 }
+
+//检查数据是否存在
+//func (b *BaseRepository) checkExist(colName string, selector interface{}) error{
+//
+//}

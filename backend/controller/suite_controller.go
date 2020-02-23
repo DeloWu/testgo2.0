@@ -4,26 +4,21 @@ import (
     "github.com/astaxie/beego/validation"
     "gopkg.in/mgo.v2/bson"
     "log"
-
-    //"log"
     "net/http"
     //"strconv"
     "testgo/common/codes"
     "testgo/models"
-
-    //"github.com/astaxie/beego/validation"
     "github.com/gin-gonic/gin"
-    //"gopkg.in/mgo.v2/bson"
     "testgo/service"
 )
 
 //依赖注入
-type Project struct {
-    Service service.IProjectService `inject:""`
+type Suite struct {
+    Service service.ISuiteService `inject:""`
 }
 
-//根据ID获取project
-func (p *Project) GetProjectById(c *gin.Context) {
+//根据ID获取suite
+func (p *Suite) GetSuiteById(c *gin.Context) {
     valid := validation.Validation{}
     id := c.Param("id")
     valid.Required(id, "id")
@@ -34,12 +29,17 @@ func (p *Project) GetProjectById(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    result := p.Service.GetProjectById(id)
-    code := codes.SUCCESS
+    result := p.Service.GetSuiteById(id)
+    var code int
+    if result != nil {
+        code = codes.SUCCESS
+    }else {
+        code = codes.NotFound
+    }
     RespData(c, http.StatusOK, code, result)
 }
 
-func (p *Project) GetProjectsByPagination(c *gin.Context) {
+func (p *Suite) GetSuitesByPagination(c *gin.Context) {
     valid := validation.Validation{}
     pageIndex, pageSize := GetPage(c)
     if valid.HasErrors() {
@@ -49,22 +49,27 @@ func (p *Project) GetProjectsByPagination(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    result := p.Service.GetProjectsByPagination(pageIndex, pageSize)
-    code := codes.SUCCESS
+    result := p.Service.GetSuitesByPagination(pageIndex, pageSize)
+    var code int
+    if *result != nil {
+       code = codes.SUCCESS
+    }else {
+       code = codes.NotFound
+    }
     RespData(c, http.StatusOK, code, result)
 }
 
-func (p *Project) GetProjectsCounts(c *gin.Context) {
-    counts := p.Service.GetProjectsCounts(bson.M{})
+func (p *Suite) GetSuitesCounts(c *gin.Context) {
+    counts := p.Service.GetSuitesCounts(bson.M{})
     result := bson.M{"total": counts}
     code := codes.SUCCESS
     RespData(c, http.StatusOK, code, result)
 }
 
-func (p *Project) AddProject(c *gin.Context) {
+func (p *Suite) AddSuite(c *gin.Context) {
     valid := validation.Validation{}
-    var project models.Project
-    if err := c.BindJSON(&project); err != nil{
+    var suite models.Suite
+    if err := c.BindJSON(&suite); err != nil{
         log.Println(err)
         code := codes.InvalidParams
         RespData(c, http.StatusOK, code, nil)
@@ -76,7 +81,7 @@ func (p *Project) AddProject(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    err := p.Service.AddProject(project)
+    err := p.Service.AddSuite(suite)
     if err != nil {
         log.Println(err)
         code := codes.InvalidParams
@@ -86,10 +91,10 @@ func (p *Project) AddProject(c *gin.Context) {
     RespData(c, http.StatusOK, code, nil)
 }
 
-func (p *Project) EditProject(c *gin.Context) {
+func (p *Suite) EditSuite(c *gin.Context) {
     valid := validation.Validation{}
-    var project models.Project
-    if err := c.BindJSON(&project); err != nil{
+    var suite models.Suite
+    if err := c.BindJSON(&suite); err != nil{
         log.Println(err)
         code := codes.InvalidParams
         RespData(c, http.StatusOK, code, nil)
@@ -101,7 +106,7 @@ func (p *Project) EditProject(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    err := p.Service.EditProject(project)
+    err := p.Service.EditSuite(suite)
     if err != nil {
         log.Println(err)
         code := codes.InvalidParams
@@ -111,7 +116,7 @@ func (p *Project) EditProject(c *gin.Context) {
     RespData(c, http.StatusOK, code, nil)
 }
 
-func (p *Project) DeleteProjectById(c *gin.Context) {
+func (p *Suite) DeleteSuiteById(c *gin.Context) {
     valid := validation.Validation{}
     id := c.Param("id")
     valid.Required(id, "id")
@@ -122,7 +127,7 @@ func (p *Project) DeleteProjectById(c *gin.Context) {
             log.Println(err.Key, err.Message)
         }
     }
-    err := p.Service.DeleteProjectById(id)
+    err := p.Service.DeleteSuiteById(id)
     if err != nil {
         log.Println(err)
         code := codes.InvalidParams

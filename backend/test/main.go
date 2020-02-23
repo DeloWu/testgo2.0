@@ -2,25 +2,35 @@ package main
 
 import (
     "fmt"
-    "gopkg.in/mgo.v2"
-    "gopkg.in/mgo.v2/bson"
-    "log"
+    "testgo/models"
 )
 
-func main(){
-    session, err := mgo.Dial("127.0.0.1:27017")
-    mgo.SetDebug(true)
-    if err != nil{
-        panic(err)
-    }
-    defer session.Close()
-    session.SetMode(mgo.Monotonic, true)
-    Conn := session.DB("testgo")
-    log.Println("Connect Mongodb Success")
-    var result interface{}
-    err = Conn.C("project").Find(bson.M{"_id": "5e3d0a68268fcf112331ec8c"}).One(&result)
-    if err != nil{
-        fmt.Println(err)
-    }
-    fmt.Printf("%+v", result)
+type people struct {
+    name string
 }
+func main(){
+    r3 := returnNil3()
+    r4 := returnNil4()
+    fmt.Println(r3, "-------", r4)
+    if r3 != nil{
+        fmt.Println("r3 != nil")
+    }else {
+        fmt.Println("r3 == nil")
+    }
+    if r4 != nil{
+        fmt.Println("r4 equal nil is true")
+    }else {
+        fmt.Println("r4 equal nil is not true")
+    }
+
+}
+
+
+func returnNil3()(r *models.Project){
+    return nil
+}
+func returnNil4()(r *[]models.Project){
+    return nil
+}
+
+
