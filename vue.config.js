@@ -18,6 +18,7 @@ module.exports = {
             .set('@utils', resolve('src/utils'))
             .set('@views', resolve('src/views'))
             .set('@static', resolve('src/static'))
+            .set('@config', resolve('config'))
     },
     // module: {
     //     rules: [{

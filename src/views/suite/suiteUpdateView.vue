@@ -154,7 +154,7 @@ export default {
         },
         // 根据this.apis / this.steps 生成transfer的可选步骤 data
         generateAllStep(){
-            this.cases.forEach((item, index) => {
+            this.cases.forEach((item) => {
                 let cur_item_key = "case-" + Object.keys(item)[0];
                 let cur_item_value = "用例-" + item[Object.keys(item)[0]];
                 this.allSteps.push({

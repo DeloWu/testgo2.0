@@ -1,6 +1,6 @@
 # testgo2.0
 自研基于httpRunner接口测试平台
-golang + gin + vue + vue-router + Element + httpRunner
+golang + gin + vue + vue-router + axios + Element + httpRunner
 ## Project setup
 ```
 yarn install

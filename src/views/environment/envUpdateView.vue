@@ -13,22 +13,22 @@
             <br>
             <el-row>
                 <el-col :span="12">
-                    <el-form ref="form" :model="form" label-width="100px" label-position="left" size="medium">
-                        <el-form-item label="环境名称:" required>
+                    <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="medium">
+                        <el-form-item label="环境名称:" prop="envName" required>
                             <el-input v-model="form.envName"></el-input>
                         </el-form-item>
-                        <el-form-item label="环境ip:" required>
+                        <el-form-item label="环境ip:" prop="envIp" required>
                             <el-input v-model="form.envIp"></el-input>
                         </el-form-item>
-                        <el-form-item label="环境端口:" required>
+                        <el-form-item label="环境端口:" prop="envPort" required>
                             <el-input v-model="form.envPort"></el-input>
                         </el-form-item>
-                        <el-form-item label="关联项目:" required>
-                            <el-select v-model="form.relativePro.value" placeholder="请选择关联项目">
-                                <el-option :label="item.label" :value="item.value" v-for="item in relativePros" :key="item.value"></el-option>
+                        <el-form-item label="关联项目:" prop="relativePro" required>
+                            <el-select v-model="form.relativePro" placeholder="请选择关联项目">
+                                <el-option :label="item.proName" :value="item.id" v-for="item in relativePros" :key="item.value"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="项目描述:">
+                        <el-form-item label="项目描述:" prop="envDesc">
                             <el-input type="textarea" v-model="form.envDesc"></el-input>
                         </el-form-item>
                         <el-form-item>
@@ -44,38 +44,108 @@
 </template>
 
 <script>
-export default {
-    name: 'envUpdate',
-    data() {
-        return {
-            form: {
-            
+    import {getProjectsByPagination} from "@api/project"
+    import {getEnvironmentById, editEnvironment} from "@api/environment"
+    export default {
+        name: 'envUpdate',
+        data() {
+            return {
+                form: {
+                    // envName: "",
+                    // envIp: "",
+                    // envPort: "0",
+                    // envDesc: "",
+                    // relativePro: []
+                },
+                rules: {
+                    envName: [
+                        { required: true, message: '请输入环境名称', trigger: 'blur' },
+                    ],
+                    envIp: [
+                        { required: true, message: '请输入环境ip', trigger: 'blur' },
+                    ],
+                    envPort: [
+                        { required: true, message: '请输入环境端口', trigger: 'blur' },
+                    ],
+                    relativePro: [
+                        { required: true, message: '请选择关联项目', trigger: 'blur' },
+                    ]
+                },
+                relativePros: []
+            }
+        },
+        methods: {
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
             },
-            relativePros: []
-        }
-    },
-    methods: {
-        save: function(){
-            window.console.log("保存并返回/pro-index")
+            successMessage(){
+                this.$message({
+                    message: '数据更新成功',
+                    type: 'success'
+                });
+            },
+            failMessage(){
+                this.$message({
+                    message: '数据更新失败',
+                    type: 'error'
+                });
+            },
+            save: function(formData){
+                this.$refs[formData].validate((valid) => {
+                    if (valid) {
+                        //relativePro格式转换 string => [string]
+                        if(typeof this.form.relativePro == "string"){
+                            this.form.relativePro = [this.form.relativePro]
+                        }
+                        editEnvironment(this.form).then(response => {
+                            const code = response.data.code;
+                            if(code == 200){
+                                this.successMessage();
+                                this.$router.push('/env-index');
+                            }else{
+                                this.failMessage();
+                            }
+                        });
+                    } else {
+                        window.console.log('表单格式校验失败!');
+                        return false;
+                    }
+                });
+            },
+            saveAndContinue(formData){
+                this.$refs[formData].validate((valid) => {
+                    if (valid) {
+                        if(typeof this.form.relativePro == "string"){
+                            this.form.relativePro = [this.form.relativePro]
+                        }
+                        editEnvironment(this.form).then(response => {
+                            const code = response.data.code;
+                            if(code == 200){
+                                this.successMessage();
+                                this.$router.go(0);
+                            }else{
+                                this.failMessage();
+                            }
+                        });
+                    } else {
+                        window.console.log('表单格式校验失败!');
+                        return false;
+                    }
+                });
+            },
+            cancelSave(){
+                this.$router.push('/env-index')
+            }
         },
-        saveAndContinue(){
-            window.console.log("保存并返回/pro-add")
-        },
-        cancelSave(){
-            window.console.log("不保存并返回/pro-index")
-        }
-    },
-    mounted(){
-        window.console.log("请求后端获取所有项目");
-        this.relativePros = [{label:"项目一", value: 11}, {label:"项目二", value: 22}];
-        window.console.log("created_hook:向后端请求数据");
-        this.form = {
-                envName: "环境一",
-                envIp: "https:127.0.0.1",
-                envPort: 443,
-                relativePro: {label:"项目一", value: 11},
-                envDesc: "环境一描述"
-            };
+        mounted(){
+            getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+                this.relativePros = response.data.data
+            });
+            const updateId = this.$router.currentRoute.query.id;
+            getEnvironmentById(updateId).then(response => {
+                this.form = response.data.data;
+                this.form.relativePro = this.form.relativePro[0];
+            });
     }
 }
 </script>

@@ -78,9 +78,9 @@
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
                     :page-sizes="[10, 20, 50, 100]"
-                    :page-size="10"
+                    :page-size="currentPageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="200">
+                    :total="total">
                 </el-pagination>
             </el-row>
         </el-footer>
@@ -88,123 +88,83 @@
 </template>
 
 <script>
-export default {
+    import config from "@config"
+    import {getProjectTotal, getProjectsByPagination, deleteProjectById} from "@api/project"
+    export default {
     name: 'proIndex',
     data() {
         return {
             input: '',
             currentPage: 1,
+            currentPageSize: config.pageSize,
+            total: 0,
+            deleteId: 0,
             tableData: [
-                {
-                    proIndex: 11,
-                    proName: "项目一",
-                    proDesc: "项目描述一",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 22,
-                    proName: "项目二",
-                    proDesc: "项目描述二",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 33,
-                    proName: "项目三",
-                    proDesc: "项目描述三",
-                },
-                {
-                    proIndex: 44,
-                    proName: "项目四",
-                    proDesc: "项目描述四",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 22,
-                    proName: "项目二",
-                    proDesc: "项目描述二",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 33,
-                    proName: "项目三",
-                    proDesc: "项目描述三",
-                },
-                {
-                    proIndex: 44,
-                    proName: "项目四",
-                    proDesc: "项目描述四",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 22,
-                    proName: "项目二",
-                    proDesc: "项目描述二",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 33,
-                    proName: "项目三",
-                    proDesc: "项目描述三",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                },
-                {
-                    proIndex: 44,
-                    proName: "项目四",
-                    proDesc: "项目描述四",
-                    createTime: 1581135254,
-                    modifyTime: 1581135255
-                }
+
             ]
         }
     },
     methods: {
+        fetchData(){
+            //    获取分页数据
+            getProjectsByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
+            getProjectTotal().then(response => {
+                this.total = response.data.data.total
+            });
+        },
         search(){
             window.console.log('call search func');
         },
         handleSizeChange(val) {
-            window.console.log(`每页 ${val} 条`);
+            this.currentPageSize = val;
+            getProjectsByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
         },
         handleCurrentChange(val) {
-            window.console.log(`当前页: ${val}`);
+            this.currentPage = val;
+            getProjectsByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
         },
         confirmDelete() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }).then(() => {
-            this.$message({
-                type: 'success',
-                message: '删除成功!'
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deleteProjectById(this.deleteId);
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+                this.deleteId = 0;
+                // 刷新数据
+                this.fetchData()
+            }).catch(() => {
+                this.$message({
+                type: 'info',
+                message: '已取消删除'
+                });
             });
-        }).catch(() => {
-            this.$message({
-            type: 'info',
-            message: '已取消删除'
-            });
-        });
-        },
-        addPro(){
-            window.console.log("call add pro func");
         },
         operate(row, column, cell){
             if (cell.className.indexOf("edit") >= 0) {
-                window.console.log("call edit func, cur row is: " + row.proIndex);
+                this.$router.push({path:"/pro-update", query:{id:row.id}});
             }else if(cell.className.indexOf("delete") >= 0){
-                window.console.log("call delete func, cur row is: " + row.proIndex);
+                this.deleteId = row.id;
                 this.confirmDelete();
             }else {
-                window.console.log("no func match, cur row is: " + row.proIndex);
+                window.console.log("no func match, cur row is: " + row.id);
             }
         },
-    }
+    },
+    created() {
+        //获取数据,渲染页面
+        this.fetchData();
+    },
 }
 </script>
 
