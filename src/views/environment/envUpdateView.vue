@@ -32,9 +32,9 @@
                             <el-input type="textarea" v-model="form.envDesc"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="success" @click="save">保存</el-button>
-                            <el-button type="primary" @click="saveAndContinue">保存并继续添加</el-button>
-                            <el-button type="danger" @click="cancelSave">取消</el-button>
+                            <el-button type="success" @click="save('form')">保存</el-button>
+                            <el-button type="primary" @click="saveAndContinue('form')">保存并继续添加</el-button>
+                            <el-button type="danger" @click="cancelSave('form')">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>

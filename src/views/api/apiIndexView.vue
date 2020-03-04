@@ -82,7 +82,8 @@
                         </el-table-column>
                         <el-table-column
                             prop="relativePro"
-                            label="所属项目">
+                            label="所属项目"
+                            :formatter="relativeProFormatter">
                         </el-table-column>
                         <el-table-column
                             fixed="right"
@@ -242,6 +243,19 @@ export default {
         },
         filter(){
             window.console.log("call filter func");
+        },
+        relativeProFormatter(row){
+            return this.id_proName_map[row.relativePro[0]]
+        }
+    },
+    computed: {
+        id_proName_map: function () {
+            // 用于所属项目的id和名称映射
+            let map = {};
+            for (const item of this.options){
+                map[item.id] = item.proName;
+            }
+            return map
         }
     }
 }

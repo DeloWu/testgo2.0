@@ -75,8 +75,9 @@
                           label="环境描述">
                         </el-table-column>
                         <el-table-column
-                          prop="relativePro[0]"
-                          label="所属项目">
+                          prop="relativePro"
+                          label="所属项目"
+                          :formatter="relativeProFormatter">
                         </el-table-column>
                         <el-table-column
                           fixed="right"
@@ -136,7 +137,6 @@
             options: [
 
             ],
-            id_proName_map: {}
         }
     },
     methods: {
@@ -149,11 +149,8 @@
                 this.total = response.data.data.total
             });
             getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
-                this.options = response.data.data
+                this.options = response.data.data;
             });
-            for (const item of this.options){
-                this.id_proName_map[item.id] = item.proName;
-            }
         },
         search(){
             window.console.log('call search func');
@@ -203,8 +200,21 @@
         },
         filter(){
             window.console.log("call filter func");
+        },
+        relativeProFormatter(row){
+            return this.id_proName_map[row.relativePro[0]]
         }
     },
+        computed: {
+            id_proName_map: function () {
+                // 用于所属项目的id和名称映射
+                let map = {};
+                for (const item of this.options){
+                    map[item.id] = item.proName;
+                }
+                return map
+            }
+        },
     created() {
         //获取数据,渲染页面
         this.fetchData();
