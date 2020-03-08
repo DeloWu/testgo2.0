@@ -17,7 +17,7 @@
                 </el-col>
                 <!-- <el-col :span="5"></el-col> -->
                 <el-col :span="4" :offset="11">
-                    <el-select v-model="filterEnvs" multiple placeholder="请选择项目">
+                    <el-select v-model="filterPros" multiple placeholder="请选择项目">
                         <el-option
                           v-for="item in options"
                           :key="item.id"
@@ -133,7 +133,7 @@
             tableData: [
 
             ],
-            filterEnvs: [],
+            filterPros: [],
             options: [
 
             ],
@@ -141,15 +141,15 @@
     },
     methods: {
         fetchData(){
+            getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+                this.options = response.data.data;
+            });
             //    获取分页数据
             getEnvironmentsByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
                 this.tableData = response.data.data
             });
             getEnvironmentTotal().then(response => {
                 this.total = response.data.data.total
-            });
-            getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
-                this.options = response.data.data;
             });
         },
         search(){

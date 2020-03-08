@@ -23,7 +23,7 @@
                         <el-form-item>
                             <el-button type="success" @click="save('form')">保存</el-button>
                             <el-button type="primary" @click="saveAndContinue('form')">保存并继续添加</el-button>
-                            <el-button type="danger" @click="cancelSave('form')">取消</el-button>
+                            <el-button type="danger" @click="cancelSave">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -93,7 +93,7 @@
                         const code = response.data.code;
                         if(code == 200){
                             this.successMessage();
-                            this.$router.push('/pro-add');
+                            this.form = {};
                         }else{
                             this.failMessage();
                         }
@@ -105,7 +105,7 @@
             });
         },
         cancelSave(){
-            window.console.log("不保存并返回/pro-index")
+            this.$router.push('/pro-index')
         }
     },
     created() {

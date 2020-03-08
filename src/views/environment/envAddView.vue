@@ -23,7 +23,7 @@
                         <el-form-item label="环境端口:" prop="envPort" required>
                             <el-input v-model="form.envPort"></el-input>
                         </el-form-item>
-                        <el-form-item label="关联项目:" prop="relativePro" required>
+                        <el-form-item label="关联项目:" required>
                             <el-select v-model="form.relativePro" placeholder="请选择关联项目">
                                 <el-option :label="item.proName" :value="item.id" v-for="item in relativePros" :key="item.id"></el-option>
                             </el-select>
@@ -35,7 +35,7 @@
                             <el-button type="success" @click="save('form')">保存</el-button>
                             <el-button type="primary" @click="saveAndContinue('form')">保存并继续添加</el-button>
                             <el-button type="warning" @click="resetForm('form')">重置</el-button>
-                            <el-button type="danger" @click="cancelSave('form')">取消</el-button>
+                            <el-button type="danger" @click="cancelSave()">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -46,18 +46,14 @@
 
 <script>
     import {getProjectsByPagination} from "@api/project"
-    import {addEnvironment} from "../../api/environment";
+    import {addEnvironment} from "@api/environment";
 
 export default {
     name: 'envAdd',
     data() {
         return {
             form: {
-                // envName: "",
-                // envIp: "",
-                // envPort: "0",
-                // envDesc: "",
-                // relativePro: []
+
             },
             rules: {
                 envName: [
@@ -69,9 +65,6 @@ export default {
                 envPort: [
                     { required: true, message: '请输入环境端口', trigger: 'blur' },
                 ],
-                relativePro: [
-                    { required: true, message: '请选择关联项目', trigger: 'blur' },
-                ]
             },
             relativePros: []
         }
@@ -95,11 +88,9 @@ export default {
         save: function(formData){
             this.$refs[formData].validate((valid) => {
                 if (valid) {
-                    //relativePro格式转换 string => [string]
-                    if(typeof this.form.relativePro == "string"){
-                        this.form.relativePro = [this.form.relativePro]
-                    }
-                    addEnvironment(this.form).then(response => {
+                    //需要格式转换
+                    let postForm = this.formTransform();
+                    addEnvironment(postForm).then(response => {
                         const code = response.data.code;
                         if(code == 200){
                             this.successMessage();
@@ -117,14 +108,13 @@ export default {
         saveAndContinue(formData){
             this.$refs[formData].validate((valid) => {
                 if (valid) {
-                    if(typeof this.form.relativePro == "string"){
-                        this.form.relativePro = [this.form.relativePro]
-                    }
-                    addEnvironment(this.form).then(response => {
+                    //需要格式转换
+                    let postForm = this.formTransform();
+                    addEnvironment(postForm).then(response => {
                         const code = response.data.code;
                         if(code == 200){
                             this.successMessage();
-                            this.$router.go(0);
+                            this.form = {};
                         }else{
                             this.failMessage();
                         }
@@ -137,7 +127,19 @@ export default {
         },
         cancelSave(){
             this.$router.push('/env-index')
+        },
+        // 发送请求前的格式转换
+        formTransform: function () {
+            //深拷贝
+            let postForm = JSON.parse(JSON.stringify(this.form));
+            if(typeof postForm.relativePro == "string"){
+                postForm.relativePro = [postForm.relativePro]
+            }
+            return postForm
         }
+    },
+    computed:{
+
     },
     created(){
         getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {

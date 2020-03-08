@@ -31,6 +31,9 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
+                        <el-form-item label="httpRunner-public-headers:" style="width:600px;">
+                            <el-input type="textarea" v-model="form.configHeaderes" placeholder='请输入正确格式,e.g. {"foo":"bar"}'></el-input>
+                        </el-form-item>
                         <el-form-item label="httpRunner-public-variables:" style="width:600px;">
                             <el-input type="textarea" v-model="form.configVariables" placeholder='请输入正确格式,e.g. [{"expected_status_code": 200}, {"foo":"bar"}]'></el-input>
                         </el-form-item>
@@ -181,7 +184,7 @@ export default {
                 });
                 this.allStepsDict[cur_item_key]=cur_item_value;
             });
-            this.cases.forEach((item, index) => {
+            this.cases.forEach((item) => {
                 let cur_item_key = "case-" + Object.keys(item)[0];
                 let cur_item_value = "用例-" + item[Object.keys(item)[0]];
                 this.allSteps.push({

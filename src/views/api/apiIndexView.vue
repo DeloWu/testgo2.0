@@ -20,9 +20,9 @@
                     <el-select v-model="filterPros" multiple placeholder="请选择项目">
                         <el-option
                             v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.proName"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </el-col>
@@ -57,23 +57,18 @@
                             show-overflow-tooltip
                             prop="apiName"
                             label="接口名称"
-                            width="140">
+                            width="170">
                         </el-table-column>
                         <el-table-column
                             show-overflow-tooltip
-                            prop="apiUrl"
+                            prop="apiPath"
                             label="接口路径"
-                            width="240">
+                            width="260">
                         </el-table-column>
                         <el-table-column
                             prop="apiMethod"
                             label="请求方式"
                             width="80">
-                        </el-table-column>
-                        <el-table-column
-                            show-overflow-tooltip
-                            prop="apiRequestData"
-                            label="请求参数">
                         </el-table-column>
                         <el-table-column
                             show-overflow-tooltip
@@ -122,9 +117,9 @@
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
                     :page-sizes="[10, 20, 50, 100]"
-                    :page-size="10"
+                    :page-size="currentPageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="200">
+                    :total="total">
                 </el-pagination>
             </el-row>
         </el-footer>
@@ -142,71 +137,55 @@
 </template>
 
 <script>
-export default {
+    import config from "@config"
+    import {getProjectsByPagination} from "@api/project"
+    import {getApiTotal, getApisByPagination, deleteApiById} from "@api/api"
+    export default {
     name: 'apiIndex',
     data() {
         return {
             dialogVisible: false,
             input: '',
             currentPage: 1,
+            currentPageSize: config.pageSize,
+            total: 0,
+            deleteId: 0,
             tableData: [
-                {
-                    apiIndex: 11,
-                    apiName: "接口一",
-                    apiUrl: "http://127.0.0.1:8080/",
-                    apiMethod: "get",
-                    apiContentType: "json",
-                    apiHeader: {},
-                    apiParams: {"foo": "bar"},
-                    apiPostData: {"foo1": "bar1"},
-                    apiDesc: "接口描述一",
-                    relativePro: 1,
-                    createTime: 1581135254,
-                    modifyTime: 1581135255,
-                    variables: [{"expected_status_code": 200}],
-                    validate: [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]]
-                },
-                {
-                    apiIndex: 22,
-                    apiName: "接口二",
-                    apiUrl: "https://127.0.0.1:443/v1/foo/bar",
-                    apiMethod: "post",
-                    apiContentType: "json",
-                    apiHeader: {},
-                    apiParams: {"foo": "bar"},
-                    apiPostData: {"foo1": "bar1"},
-                    apiDesc: "接口描述二",
-                    relativePro: 1,
-                    createTime: 1581135254,
-                    modifyTime: 1581135255,
-                    variables: [{"expected_status_code": 200}],
-                    validate: [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]]
-                },
+
             ],
             filterPros: [],
-            options: [{
-                value: 1,
-                label: "项目一"
-            },{
-                value: 2,
-                label: "项目二"
-            },
-            {
-                value: 3,
-                label: "项目三"
-            },
-            ]
+            options: [
+
+            ],
         }
     },
     methods: {
+        fetchData(){
+            //    获取分页数据
+            getApisByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
+            getApiTotal().then(response => {
+                this.total = response.data.data.total
+            });
+            getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+                this.options = response.data.data;
+            });
+        },
         search(){
             window.console.log('call search func');
         },
         handleSizeChange(val) {
-            window.console.log(`每页 ${val} 条`);
+            this.currentPageSize = val;
+            getApisByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
         },
         handleCurrentChange(val) {
-            window.console.log(`当前页: ${val}`);
+            this.currentPage = val;
+            getApisByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
         },
         confirmDelete() {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -214,10 +193,14 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                deleteApiById(this.deleteId);
                 this.$message({
                     type: 'success',
                     message: '删除成功!'
                 });
+                this.deleteId = 0;
+                // 刷新数据
+                this.fetchData()
             }).catch(() => {
                 this.$message({
                 type: 'info',
@@ -225,14 +208,11 @@ export default {
                 });
             });
         },
-        addApi(){
-            window.console.log("call add api func");
-        },
         operate(row, column, cell){
             if (cell.className.indexOf("edit") >= 0) {
-                window.console.log("call edit func, cur row is: " + row.apiIndex);
+                this.$router.push({path:"/api-update", query:{id:row.id}});
             }else if(cell.className.indexOf("delete") >= 0){
-                window.console.log("call delete func, cur row is: " + row.apiIndex);
+                this.deleteId = row.id;
                 this.confirmDelete();
             }else if(cell.className.indexOf("run") >= 0){
                 this.dialogVisible = true;
@@ -257,7 +237,11 @@ export default {
             }
             return map
         }
-    }
+    },
+    created() {
+        //获取数据,渲染页面
+        this.fetchData();
+    },
 }
 </script>
 

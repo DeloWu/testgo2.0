@@ -9,4 +9,12 @@ function removeInArrayByIndex(array, removeIndex){
     return tempArray
 }
 
-export {removeInArrayByIndex}
+//专门针对表格数据，将value转换为对应的数据类型
+//[{"keyName":"foo", "valueType":"int", "value":"1.0"}, {, , }...] ==> [{"keyName":"foo", "valueType":"int", "value":"1"}, {, , }...]
+function transformValue(arr) {
+    for (let item of arr){
+        window.console.log(item);
+
+    }
+}
+export {removeInArrayByIndex, transformValue}

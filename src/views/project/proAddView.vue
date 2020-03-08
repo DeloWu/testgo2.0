@@ -73,7 +73,7 @@
                             const code = response.data.code;
                             if(code == 200){
                                 this.successMessage();
-                                this.$router.push('/pro-index');
+                                this.form = {};
                             }else{
                                 this.failMessage();
                             }
