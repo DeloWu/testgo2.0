@@ -24,7 +24,7 @@
                             <el-input v-model="form.envPort"></el-input>
                         </el-form-item>
                         <el-form-item label="关联项目:" required>
-                            <el-select v-model="form.relativePro" placeholder="请选择关联项目">
+                            <el-select v-model="form.relativePro" placeholder="请选择关联项目" multiple>
                                 <el-option :label="item.proName" :value="item.id" v-for="item in relativePros" :key="item.id"></el-option>
                             </el-select>
                         </el-form-item>

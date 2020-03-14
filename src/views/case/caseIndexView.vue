@@ -64,7 +64,8 @@
                             show-overflow-tooltip
                             prop="caseSteps"
                             label="用例步骤"
-                            width="350">
+                            width="350"
+                            :formatter="caseStepsFormatter">
                         </el-table-column>
                         <el-table-column
                             show-overflow-tooltip
@@ -128,57 +129,55 @@
 </template>
 
 <script>
-export default {
+    import config from "@config"
+    import {getProjectsByPagination} from "@api/project"
+    import {getCaseTotal, getCasesByPagination, deleteCaseById} from "@api/case"
+    export default {
     name: 'caseIndex',
     data() {
         return {
             dialogVisible: false,
             input: '',
             currentPage: 1,
+            currentPageSize: config.pageSize,
+            total: 0,
+            deleteId: 0,
             tableData: [
-                {
-                    caseIndex: 11,
-                    caseName: "用例一",
-                    caseSteps: `[{"1":"api"}, {"4":"case"}]`,
-                    relativePro: [11, 22],
-                    createTime: 1581135254,
-                    modifyTime: 1581135255,
-                    caseDesc: "用例描述一",
-                    configVariables: [{"expected_status_code": 200}],
-                    configBaseUrl: "http://127.0.0.1:5000",
-                    configOutput: ["session_token"],
-                    configVerify: false,
-                    extract: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]},
-                    validate: {"apiId": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],"apiId2": [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]],
-                    variables: {"apiId": [{"expected_status_code": 200}], "apiId2": [{"expected_status_code": 200}]}},
-                    setupHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"],
-                    teardownHooks:["${setup_hook_prepare_kwargs($request)}","${teardown_hook_sleep_N_secs($response, n_secs)}"]
-                },
+
             ],
             filterPros: [],
-            options: [{
-                value: 1,
-                label: "项目一"
-            },{
-                value: 2,
-                label: "项目二"
-            },
-            {
-                value: 3,
-                label: "项目三"
-            },
+            options: [
+
             ]
         }
     },
     methods: {
+        fetchData(){
+            //    获取分页数据
+            getCasesByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
+            getCaseTotal().then(response => {
+                this.total = response.data.data.total
+            });
+            getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+                this.options = response.data.data;
+            });
+        },
         search(){
             window.console.log('call search func');
         },
         handleSizeChange(val) {
-            window.console.log(`每页 ${val} 条`);
+            this.currentPageSize = val;
+            getCasesByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
         },
         handleCurrentChange(val) {
-            window.console.log(`当前页: ${val}`);
+            this.currentPage = val;
+            getCasesByPagination({pageindex: this.currentPage, pagesize: this.currentPageSize}).then(response => {
+                this.tableData = response.data.data
+            });
         },
         confirmDelete() {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -186,10 +185,14 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
+              deleteCaseById(this.deleteId);
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               });
+              this.deleteId = 0;
+              // 刷新数据
+              this.fetchData()
             }).catch(() => {
               this.$message({
                 type: 'info',
@@ -197,14 +200,11 @@ export default {
               });
             });
           },
-        addCase(){
-            window.console.log("call add Case func");
-        },
         operate(row, column, cell){
             if (cell.className.indexOf("edit") >= 0) {
-                window.console.log("call edit func, cur row is: " + row.caseIndex);
+                this.$router.push({path:"/case-update", query:{id:row.id}});
             }else if(cell.className.indexOf("delete") >= 0){
-                window.console.log("call delete func, cur row is: " + row.caseIndex);
+                this.deleteId = row.id;
                 this.confirmDelete();
             }else if(cell.className.indexOf("run") >= 0){
                 this.dialogVisible = true;
@@ -215,9 +215,16 @@ export default {
         },
         filter(){
             window.console.log("call filter func");
+        },
+        caseStepsFormatter(row){
+            return "TODO: 转换步骤内容"
+        }
+    },
+        created() {
+            //获取数据,渲染页面
+            this.fetchData();
         }
     }
-}
 </script>
 
 <style scoped>

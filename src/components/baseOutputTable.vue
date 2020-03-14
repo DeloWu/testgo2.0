@@ -3,9 +3,9 @@
             name="baseExtractTable"
             width="100%"
             :data="tableData">
-        <el-table-column label="钩子函数">
+        <el-table-column label="输出内容">
             <template slot-scope="scope">
-                <el-input type="input" placeholder="${setup_hook_prepare_kwargs($request)}" v-model="scope.row.value"></el-input>
+                <el-input type="input" v-model="scope.row.value"></el-input>
             </template>
         </el-table-column>
         <el-table-column
@@ -20,7 +20,7 @@
 
 <script>
     export default {
-        name: "base-Hooks-Table",
+        name: "base-Output-Table",
         props: {
             tableData: {
                 require: true,

@@ -17,7 +17,7 @@
                         <el-form-item label="接口名称:" prop="apiName" required>
                             <el-input v-model="form.apiName"></el-input>
                         </el-form-item>
-                        <el-form-item  label="base-url:" prop="apibaseUrl">
+                        <el-form-item  label="public-url:" prop="apibaseUrl">
                             <el-select
                                     v-model="form.apiBaseUrl"
                                     filterable
@@ -135,7 +135,7 @@ export default {
                 // 格式为: ["${setup_hook_prepare_kwargs($request)}", ...]
                 setupHooks: [],
                 // 格式为: ["${setup_hook_prepare_kwargs($request)}", ...]
-                teardownHooks: []
+                teardownHooks: [],
             },
             rules: {
                 apiName: [
@@ -154,7 +154,7 @@ export default {
                     { required: true, message: '请选择关联项目', trigger: 'blur' },
                 ]
             },
-            apiUrls: [],
+            apiBaseUrls: [],
             relativePros: []
         }
     },
@@ -290,20 +290,7 @@ export default {
     },
     created(){
         this.form = {
-                    apiIndex: 11,
-                    apiName: "接口一",
-                    apiUrl: "http://127.0.0.1:8080/",
-                    apiMethod: "get",
-                    apiContentType: "application/json",
-                    apiHeader: JSON.stringify({}),
-                    apiParams: JSON.stringify({"foo": "bar"}),
-                    apiPostData: JSON.stringify({"foo1": "bar1"}),
-                    apiDesc: "接口描述一",
-                    relativePro: 11,
-                    createTime: 1581135254,
-                    modifyTime: 1581135255,
-                    variables: JSON.stringify([{"expected_status_code": 200}]),
-                    validate: JSON.stringify([["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]])
+
                 };
         getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
             this.relativePros = response.data.data
@@ -314,7 +301,6 @@ export default {
         const updateId = this.$router.currentRoute.query.id;
         getApiById(updateId).then(response => {
             this.form = response.data.data;
-            this.form.relativePro = this.form.relativePro[0];
         });
     }
 }

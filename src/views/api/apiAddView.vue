@@ -17,7 +17,7 @@
                         <el-form-item label="接口名称:" prop="apiName" required>
                             <el-input v-model="form.apiName"></el-input>
                         </el-form-item>
-                        <el-form-item  label="base-url:" prop="baseUrl">
+                        <el-form-item  label="public-url:" prop="baseUrl">
                             <el-select
                                 v-model="form.apiBaseUrl"
                                 filterable
@@ -290,12 +290,12 @@
             }
         },
         created(){
-        getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
-            this.relativePros = response.data.data
-        });
-        getEnvironmentsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
-            this.apiBaseUrls = response.data.data
-        });
+            getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+                this.relativePros = response.data.data
+            });
+            getEnvironmentsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+                this.apiBaseUrls = response.data.data
+            });
 
     }
 }

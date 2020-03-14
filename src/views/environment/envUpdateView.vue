@@ -141,14 +141,13 @@
                 return postForm
             }
         },
-        mounted(){
+        created(){
             getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
                 this.relativePros = response.data.data
             });
             const updateId = this.$router.currentRoute.query.id;
             getEnvironmentById(updateId).then(response => {
                 this.form = response.data.data;
-                this.form.relativePro = this.form.relativePro[0];
             });
     }
 }
