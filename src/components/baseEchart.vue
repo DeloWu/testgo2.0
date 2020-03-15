@@ -1,72 +1,80 @@
+
 <template>
-    <v-chart :options="polar"/>
+    <!--为echarts准备一个具备大小的容器dom-->
+    <div id="main" style="width: 600px;height: 400px;"></div>
 </template>
-
-<style>
-    /**
-     * 默认尺寸为 600px×400px，如果想让图表响应尺寸变化，可以像下面这样
-     * 把尺寸设为百分比值（同时请记得为容器设置尺寸）。
-     */
-    .echarts {
-        width: 100%;
-        height: 100%;
-    }
-</style>
-
 <script>
-    // import ECharts from 'vue-echarts'
-    // import 'echarts/lib/chart/line'
-    // import 'echarts/lib/component/polar'
-
+    import echarts from 'echarts'
     export default {
-        components: {
-            // 'v-chart': ECharts
-        },
+        name: '',
         data () {
-            let data = []
-
-            for (let i = 0; i <= 360; i++) {
-                let t = i / 180 * Math.PI
-                let r = Math.sin(2 * t) * Math.cos(2 * t)
-                data.push([r, i])
-            }
-
             return {
-                polar: {
-                    title: {
-                        text: '极坐标双数值轴'
+                charts: '',
+                opinion:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎'],
+                opinionData:[
+                    {value:335, name:'直接访问'},
+                    {value:310, name:'邮件营销'},
+                    {value:234, name:'联盟广告'},
+                    {value:135, name:'视频广告'},
+                    {value:1548, name:'搜索引擎'}
+                ]
+            }
+        },
+        methods:{
+            drawPie(id){
+                this.charts = echarts.init(document.getElementById(id))
+                this.charts.setOption({
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a}<br/>{b}:{c} ({d}%)'
                     },
                     legend: {
-                        data: ['line']
-                    },
-                    polar: {
-                        center: ['50%', '54%']
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross'
-                        }
-                    },
-                    angleAxis: {
-                        type: 'value',
-                        startAngle: 0
-                    },
-                    radiusAxis: {
-                        min: 0
+                        orient: 'vertical',
+                        x: 'left',
+                        data:this.opinion
                     },
                     series: [
                         {
-                            coordinateSystem: 'polar',
-                            name: 'line',
-                            type: 'line',
-                            showSymbol: false,
-                            data: data
+                            name:'访问来源',
+                            type:'pie',
+                            radius:['50%','70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: '30',
+                                        fontWeight: 'blod'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data:this.opinionData
                         }
-                    ],
-                    animationDuration: 2000
-                }
+                    ]
+                })
             }
+        },
+        //调用
+        mounted(){
+            this.$nextTick(function() {
+                this.drawPie('main')
+            })
         }
     }
 </script>
+<style scoped>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+</style>

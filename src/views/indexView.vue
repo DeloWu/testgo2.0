@@ -53,8 +53,7 @@
                 <el-col :span="24">
                     <h3>近期用例执行情况</h3><br>
                     <div>
-                        <H1>TODO: 数据可视化表格</H1>
-                        <mock-echart></mock-echart>
+                        <base-echart-report></base-echart-report>
                     </div>
                 </el-col>
             </el-row>
@@ -64,25 +63,24 @@
 </template>
 
 <script>
-    // import BaseEchart from "@components/baseEchart";
-    import mockEchart from '@components/mockEchart'
-    // import baseEchart from '@components/baseEchart'
+    import BaseEchartReport from "@components/baseEchartReport";
     export default {
         name: 'index',
-        components: {mockEchart},
+        components: {BaseEchartReport},
         data() {
-        return {
-                tableData: [{
-                    proCounts: 0,
-                    envCounts: 0,
-                    apiCounts: 0,
-                    caseCounts: 0,
-                    suiteCounts: 0,
-                    reportCounts: 0,
-                    planCounts: 0,
-                    mockCounts: 0
-                }]
-            }
+            return {
+                    tableData: [{
+                        proCounts: 0,
+                        envCounts: 0,
+                        apiCounts: 0,
+                        caseCounts: 0,
+                        suiteCounts: 0,
+                        reportCounts: 0,
+                        planCounts: 0,
+                        mockCounts: 0
+                    }],
+
+                }
         },
         methods: {
 
@@ -94,6 +92,6 @@
 </script>
 
 <style scoped>
-    
+
 
 </style>
