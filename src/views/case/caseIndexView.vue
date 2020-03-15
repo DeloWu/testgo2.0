@@ -216,14 +216,14 @@
         filter(){
             window.console.log("call filter func");
         },
-        caseStepsFormatter(row){
+        caseStepsFormatter(){
             return "TODO: 转换步骤内容"
         }
     },
-        created() {
-            //获取数据,渲染页面
-            this.fetchData();
-        }
+    created() {
+        //获取数据,渲染页面
+        this.fetchData();
+    }
     }
 </script>
 

@@ -54,6 +54,7 @@
                     <h3>近期用例执行情况</h3><br>
                     <div>
                         <H1>TODO: 数据可视化表格</H1>
+                        <mock-echart></mock-echart>
                     </div>
                 </el-col>
             </el-row>
@@ -63,9 +64,13 @@
 </template>
 
 <script>
-export default {
-    name: 'index',
-    data() {
+    // import BaseEchart from "@components/baseEchart";
+    import mockEchart from '@components/mockEchart'
+    // import baseEchart from '@components/baseEchart'
+    export default {
+        name: 'index',
+        components: {mockEchart},
+        data() {
         return {
                 tableData: [{
                     proCounts: 0,
@@ -77,12 +82,15 @@ export default {
                     planCounts: 0,
                     mockCounts: 0
                 }]
-        }
-    },
-    methods: {
+            }
+        },
+        methods: {
 
-    },
-}
+        },
+        created() {
+
+        }
+    }
 </script>
 
 <style scoped>

@@ -20,6 +20,10 @@ module.exports = {
             .set('@static', resolve('src/static'))
             .set('@config', resolve('config'))
     },
+    transpileDependencies: [
+        'vue-echarts',
+        'resize-detector'
+    ],
     // module: {
     //     rules: [{
     //         test: /\.scss$/,

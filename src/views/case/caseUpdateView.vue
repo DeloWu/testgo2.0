@@ -80,19 +80,19 @@
                             </el-transfer>
                         </el-form-item>
                         <el-form-item label="指定接口步骤添加:extract / validate / variables">
-                            <el-button type="primary" @click="addStepExtract">添加extract</el-button>
+                            <el-button type="primary" @click="addTableRow('stepExtract')">添加extract</el-button>
                             <el-row>
                                 <el-col :span="15">
                                     <base-step-extract-table :tableData="form.stepExtracts" :choicedSteps="choicedApiSteps" @removeRowByIndex="removeStepExtractByIndex"></base-step-extract-table>
                                 </el-col>
                             </el-row>
-                            <el-button type="primary" @click="addStepValidate">添加validate</el-button>
+                            <el-button type="primary" @click="addTableRow('StepValidate')">添加validate</el-button>
                             <el-row>
                                 <el-col :span="20">
                                     <base-step-validate-table :tableData="form.stepValidates" :choicedSteps="choicedApiSteps" @removeRowByIndex="removeStepValidateByIndex"></base-step-validate-table>
                                 </el-col>
                             </el-row>
-                            <el-button type="primary" @click="addStepVariables">添加variables</el-button>
+                            <el-button type="primary" @click="addTableRow('StepVariables')">添加variables</el-button>
                             <el-row>
                                 <el-col :span="18">
                                     <base-step-variables-table :tableData="form.stepVariables" :choicedSteps="choicedApiSteps" @removeRowByIndex="removeStepVariablesByIndex"></base-step-variables-table>
@@ -125,7 +125,7 @@
     import {getProjectsByPagination} from "@api/project"
     import {getEnvironmentsByPagination} from "@api/environment"
     import {getApisByPagination} from "@api/api"
-    import {getCasesByPagination, addCase, getCaseById, editCase} from "@api/case"
+    import {getCasesByPagination, getCaseById, editCase} from "@api/case"
     export default {
         name: 'caseUpdate',
         components: {baseVariablesTable, baseHooksTable, baseOutputTable, baseStepExtractTable, baseStepValidateTable, baseStepVariablesTable},
@@ -300,22 +300,6 @@
             // 移除stepVariables单行
             removeStepVariablesByIndex(array, removeIndex){
                 this.form.stepVariables = removeInArrayByIndex(array, removeIndex);
-            },
-            splitSeparator(str, separator){
-                return str.split(separator)
-            },
-            addStepExtract(){
-                this.form.stepExtracts.push({});
-            },
-            addStepValidate(){
-                this.form.stepValidates.push({});
-            },
-            addStepVariables(){
-                this.form.stepVariables.push({});
-            },
-            // 移除指定步骤的httpRunner参数
-            removeByIndex(array, removeIndex){
-                this.form.stepExtracts = removeInArrayByIndex(array, removeIndex);
             },
             filter(){
                 window.console.log("根据this.filterPros 搜索所有api和case");

@@ -55,7 +55,7 @@ export default {
         }
     },
     methods: {
-        handleSubmit(event){
+        handleSubmit(){
             this.$refs.ruleForm2.validate((valid) => {
                 if(valid){
                     this.logining = true;
@@ -71,7 +71,7 @@ export default {
                         })
                     }
                 }else{
-                    console.log('error submit!');
+                    window.console.log('error submit!');
                     return false;
                 }
             })

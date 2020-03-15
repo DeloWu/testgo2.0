@@ -13,104 +13,77 @@
             <br>
             <el-row>
                 <el-col :span="24">
-                    <el-form ref="form" :model="form" label-width="100px" label-position="top" size="mini">
+                    <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="top" size="mini">
                         <p>公共配置:</p>
                         <el-form-item  label="httpRunner-public-url:">
                             <el-select
-                                v-model="form.configBaseUrl"
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择或者新增url, e.g. http://127.0.0.1:8080"
-                                style="width:600px;">
+                                    v-model="form.configBaseUrl"
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="请选择或者新增url, e.g. http://127.0.0.1:8080"
+                                    style="width:600px;">
                                 <el-option
-                                    v-for="item in apiUrls"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                        v-for="item in apiBaseUrls"
+                                        :key="item.envIp + ':' + item.envPort"
+                                        :label="item.envIp + ':' + item.envPort"
+                                        :value="item.envIp + ':' + item.envPort">
                                 </el-option>
                             </el-select>
                         </el-form-item>
+                        <el-form-item label="关联项目:" required>
+                            <el-select v-model="form.relativePro" placeholder="请选择关联项目" multiple style="width: 300px;">
+                                <el-option :label="item.proName" :value="item.id" v-for="item in relativePros" :key="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item label="httpRunner-public-variables:" style="width:600px;">
-                            <el-input type="textarea" v-model="form.configVariables" placeholder='请输入正确格式,e.g. [{"expected_status_code": 200}, {"foo":"bar"}]'></el-input>
+                            <el-button type="primary" @click="addTableRow('configVariables')">添加</el-button>
+                            <base-variables-table :tableData="form.configVariables" @removeRowByIndex="removeVariablesByIndex"></base-variables-table>
                         </el-form-item>
                         <el-divider></el-divider>
                         <p>私有配置:</p>
-                        <el-form-item label="用例集名称:" required style="width:600px;">
+                        <el-form-item label="用例集名称:" prop="suiteName" required style="width:600px;">
                             <el-input v-model="form.suiteName"></el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="httpRunner-variables:">
-                            <el-input type="textarea" v-model="form.variables" placeholder='请输入正确格式,e.g. [{"expected_status_code": 200}, {"foo":"bar"}]'></el-input>
-                        </el-form-item>
-                        <span style="color:#ec1010; font-size:8px;">validate比较符包括: eq lt le gt ge len_eq len_gt len_lt contains contained_by startswith endswith</span>
-                        <el-form-item label="httpRunner-validate:">
-                            <el-input type="textarea" v-model="form.validate" placeholder='请输入正确格式, e.g. [["eq", "status_code", "$expected_status_code"], ["eq", "content.headers.Host", "httpbin.org"]]'></el-input>
-                        </el-form-item> -->
-                        <el-form-item label="拼装用例集:" required>
+                        <el-form-item label="拼装用例步骤:" required>
+                            <el-select v-model="filterPros" multiple placeholder="请选择项目">
+                                <el-option
+                                        v-for="item in projectOptions"
+                                        :key="item.id"
+                                        :label="item.proName"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-button icon="el-icon-search" circle @click="filter"></el-button>
                             <el-transfer
-                                filterable
-                                filter-placeholder="请输入关键字搜索"
-                                v-model="choicedSteps"
-                                :data="allSteps"
-                                :titles="['可选用例', '当前用例集合']">
+                                    filterable
+                                    filter-placeholder="请输入关键字搜索"
+                                    v-model="form.suiteSteps"
+                                    :data="suiteStepOptions"
+                                    :titles="['可选步骤', '当前用例步骤']">
                             </el-transfer>
                         </el-form-item>
                         <el-form-item label="指定步骤添加:variables / parameters">
-                            <el-button type="primary" @click="addExtract">添加</el-button>
-                            <div id="stepZone">
-                                <el-row>
-                                    <div name="stepExtract">
-                                        <el-table
-                                        name="stepExtractTable"
-                                        width="100%"
-                                        :data="stepExtractTableData">
-                                            <el-table-column
-                                                label="已选中用例"
-                                                width="180">
-                                                <template slot-scope="scope">
-                                                    <el-select v-model="stepExtractTableData[scope.$index]['stepId']" placeholder="请选择">
-                                                        <el-option
-                                                            v-for="item in choicedSteps"
-                                                            :key="item"
-                                                            :label="allStepsDict[item]"
-                                                            :value="item">
-                                                        </el-option>
-                                                    </el-select>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column
-                                                label="variables内容"
-                                                width="250">
-                                                <template slot-scope="scope">
-                                                    <el-input type="textarea" v-model="scope.row.variables"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column
-                                                label="parameters内容"
-                                                width="250">
-                                                <template slot-scope="scope">
-                                                    <el-input type="textarea" v-model="scope.row.parameters"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column
-                                                label="操作"
-                                                width="50">
-                                                <template  slot-scope="scope">
-                                                    <el-button type="danger" icon="el-icon-delete" circle size="mini" @click="removeByIndex(stepExtractTableData,scope.$index)"></el-button>
-                                                </template>
-                                            </el-table-column>
-                                        </el-table>
-                                    </div>
-                                </el-row>
-                            </div>
+                            <el-button type="primary" @click="addStepVariables">添加variables</el-button>
+                            <el-row>
+                                <el-col :span="18">
+                                    <base-step-variables-table :tableData="form.stepVariables" :choicedSteps="choicedCaseSteps" @removeRowByIndex="removeStepVariablesByIndex"></base-step-variables-table>
+                                </el-col>
+                            </el-row>
+                            <el-button type="primary" @click="addStepParameters">添加parameters</el-button>
+                            <el-row>
+                                <el-col :span="18">
+                                    <base-step-variables-table :tableData="form.stepParameters" :choicedSteps="choicedCaseSteps" @removeRowByIndex="removeStepParametersByIndex"></base-step-variables-table>
+                                </el-col>
+                            </el-row>
                         </el-form-item>
                         <el-form-item label="用例描述:" style="width:600px;">
                             <el-input type="textarea" v-model="form.suiteDesc"></el-input>
                         </el-form-item>
                         <el-form-item>
-                        <el-button type="success" @click="save">保存</el-button>
-                        <el-button type="primary" @click="saveAndContinue">保存并继续添加</el-button>
-                        <el-button type="danger" @click="cancelSave">取消</el-button>
+                            <el-button type="success" @click="save('form')">保存</el-button>
+                            <el-button type="primary" @click="saveAndContinue('form')">保存并继续添加</el-button>
+                            <el-button type="danger" @click="cancelSave()">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -120,102 +93,199 @@
 </template>
 
 <script>
-import {removeInArrayByIndex} from '@utils/common.js'
-export default {
-    name: 'proAdd',
-    data() {
+    import baseVariablesTable from '@components/baseVariablesTable'
+    import baseStepVariablesTable from '@components/baseStepVariablesTable'
+    import {removeInArrayByIndex} from '@utils/common.js'
+    import {getProjectsByPagination} from "@api/project"
+    import {getEnvironmentsByPagination} from "@api/environment"
+    import {getCasesByPagination} from "@api/case"
+    import {getSuiteById, editSuite} from "@api/suite"
+    export default {
+    name: 'suiteUpdate',
+        components: {baseVariablesTable, baseStepVariablesTable},
+        data() {
         return {
             form: {
-            
+                configVariables: [],
+                stepVariables: [],
+                stepParameters: [],
+                suiteSteps: [],
+            },
+            rules: {
+                suiteName: [
+                    { required: true, message: '请输入用例集名称', trigger: 'blur' },
+                ],
             },
             apiUrls: [],
             relativePros: [],
+            // 可选api类型步骤
+            apis: [],
             // 可选case类型步骤
             cases: [],
             // 当前所有可选用例步骤
-            allSteps: [],
-            // 当前选中用例步骤, TODO:提交表单记得转换格式["case-1", "api-3"] =>[{"1":"case"}, {"3":"api"}]
-            choicedSteps: [],
-            // 用于做已选中步骤的map映射 e.g. {"api-1":"apiName1", "case-2":"caseName2"}
-            allStepsDict: {},
-            // 格式为: {"apiId": [{"extractName":"extractValue"}, {"session_token":"content.token"}],"apiId2": [{"extractName":"extractValue"}, {"session_token":"content.token"}]}
-            stepExtractTableData: []
+            apiBaseUrls: [],
+            //当前可选步骤搜索的项目
+            filterPros: [],
+            //所有项目
+            projectOptions: [
+
+            ],
         }
     },
     methods: {
-        save() {
-            window.console.log("保存并返回/pro-index")
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
-        saveAndContinue(){
-            window.console.log("保存并返回/pro-add")
-        },
-        cancelSave(){
-            window.console.log("不保存并返回/pro-index")
-        },
-        // 根据this.apis / this.steps 生成transfer的可选步骤 data
-        generateAllStep(){
-            this.cases.forEach((item) => {
-                let cur_item_key = "case-" + Object.keys(item)[0];
-                let cur_item_value = "用例-" + item[Object.keys(item)[0]];
-                this.allSteps.push({
-                    label: cur_item_value,
-                    key: cur_item_key
-                });
-                this.allStepsDict[cur_item_key]=cur_item_value;
+        successMessage(){
+            this.$message({
+                message: '数据添加成功',
+                type: 'success'
             });
         },
-        splitSeparator(str, separator){
-            return str.split(separator)
+        failMessage(){
+            this.$message({
+                message: '数据添加失败',
+                type: 'error'
+            });
         },
-        addExtract(){
-            this.stepExtractTableData.push({});
+        save(formData) {
+            this.$refs[formData].validate((valid) => {
+                if (valid) {
+                    //需要格式转换
+                    let postForm = this.formTransform();
+                    editSuite(postForm).then(response => {
+                        const code = response.data.code;
+                        if(code == 200){
+                            this.successMessage();
+                            this.$router.push('/suite-index');
+                        }else{
+                            this.failMessage();
+                        }
+                    });
+                } else {
+                    window.console.log('表单格式校验失败!');
+                    return false;
+                }
+            });
         },
-        // 移除指定步骤的httpRunner参数
-        removeByIndex(array, removeIndex){
-            this.stepExtractTableData = removeInArrayByIndex(array, removeIndex);
+        saveAndContinue(formData){
+            this.$refs[formData].validate((valid) => {
+                if (valid) {
+                    //需要格式转换
+                    let postForm = this.formTransform();
+                    editSuite(postForm).then(response => {
+                        const code = response.data.code;
+                        if(code == 200){
+                            this.successMessage();
+                            this.$router.go(0);
+                        }else{
+                            this.failMessage();
+                        }
+                    });
+                } else {
+                    window.console.log('表单格式校验失败!');
+                    return false;
+                }
+            });
         },
-        // 将form的value值,类型为Object转为String
-        stringifyForm(form){
-            let newForm = {};
-            let key = '';
-            for(key of Object.keys(form)){
-                if(typeof(form[key])=="object"){
-                    newForm[key]=JSON.stringify(form[key]);
-                }else{
-                    newForm[key]=form[key];
+        cancelSave(){
+            this.$router.push('/suite-index')
+        },
+        addTableRow(name){
+            if(name === "configHeaders"){
+                this.form.configHeaders.push({});
+            }
+            else if (name === "apiParams"){
+                this.form.apiParams.push({});
+            }
+            else if (name === "configVariables"){
+                this.form.configVariables.push({});
+            }
+            else if (name === "StepVariables"){
+                this.form.stepVariables.push({});
+            }
+            else {
+                window.console.log("无法识别: " + name);
+            }
+        },
+        addStepVariables(){
+            this.form.stepVariables.push({});
+        },
+        addStepParameters(){
+            this.form.stepParameters.push({});
+        },
+        // 移除variables单行
+        removeVariablesByIndex(array, removeIndex){
+            this.form.configVariables = removeInArrayByIndex(array, removeIndex);
+        },
+        // 移除stepVariables单行
+        removeStepVariablesByIndex(array, removeIndex){
+            this.form.stepVariables = removeInArrayByIndex(array, removeIndex);
+        },
+        // 移除stepParameters单行
+        removeStepParametersByIndex(array, removeIndex){
+            this.form.stepParameters = removeInArrayByIndex(array, removeIndex);
+        },
+        filter(){
+            window.console.log("根据this.filterPros 搜索所有api和case");
+            // this.suiteStepOptions = [...]
+        },
+        // 发送请求前的格式转换
+        formTransform: function () {
+            //深拷贝
+            let postForm = JSON.parse(JSON.stringify(this.form));
+            if(typeof postForm.relativePro == "string"){
+                postForm.relativePro = [postForm.relativePro]
+            }
+            return postForm
+        }
+    },
+    computed: {
+        //组装成[{"key": "", "label": ""}, ...]
+        suiteStepOptions: function () {
+            let options = [];
+            if(this.cases != null){
+                for (let case_ of this.cases){
+                    let labelName = "用例-" + case_.caseName;
+                    options.push({key: case_.id, label: labelName})
                 }
             }
-            return newForm
+
+            return options
         },
-        // 拼装choicedSteps
-        generatorChoicedSteps(form){
-            for(let step of form.suiteSteps){
-                this.choicedSteps.push("case-" + step);
+        choicedCaseSteps: function () {
+            let options = [];
+            if(this.form.suiteSteps != []){
+                let idLabelMap = {};
+                for (let item of this.suiteStepOptions){
+                    idLabelMap[item.key] = item.label;
+                }
+                for (let id_ of this.form.suiteSteps){
+                    if(id_ in idLabelMap){
+                        options.push({id: id_, apiName: idLabelMap[id_]})
+                    }
+                }
             }
+            return options
         }
     },
     created(){
-        window.console.log("请求后端获取所有项目");
-        this.relativePros = [{label:"项目一", value: 11}, {label:"项目二", value: 22}];
-        this.apiUrls = [{label: "https:127.0.0.1:443", value: "https:127.0.0.1:443"}, {label: "https:127.0.0.1:8080", value: "https:127.0.0.1:8080"}]
-        window.console.log("请求后端获取所有接口步骤");
-        this.cases = [{"1": "caseName1"}, {"2": "caseName2"}, {"4": "caseName4"}];
-        this.generateAllStep();
-        let originForm = {
-                    suiteIndex: 11,
-                    suiteName: "用例集一",
-                    suiteSteps: [1,4],
-                    suiteDesc: "用例集描述一",
-                    relativePro: 1,
-                    createTime: 1581135254,
-                    modifyTime: 1581135255,
-                    configVariables: [{"expected_status_code": 200}],
-                    configBaseUrl: "http://127.0.0.1:5000",
-                    variables: {"caseId": [{"expected_status_code": 200}], "caseId2": [{"expected_status_code": 200}]},
-                    parameters: {"caseId": [{"variables1": ["v1", "v2"]}, {"expected_status_code": [201, 404]}]}
-                }
-        this.form = this.stringifyForm(originForm);
-        this.generatorChoicedSteps(originForm);
+        getEnvironmentsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+            this.apiBaseUrls = response.data.data
+        });
+        getProjectsByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+            this.projectOptions = response.data.data;
+            this.relativePros = response.data.data;
+        });
+        getCasesByPagination({pageindex: 1, pagesize: 1000}).then(response => {
+            if(response.data.data != null){
+                this.cases = response.data.data;
+            }
+        });
+        const updateId = this.$router.currentRoute.query.id;
+        getSuiteById(updateId).then(response => {
+            this.form = response.data.data;
+        });
     }
 }
 </script>
