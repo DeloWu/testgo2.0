@@ -1,6 +1,6 @@
 # testgo2.0
 自研基于httpRunner接口测试平台
-golang + gin + vue + vue-router + axios + Element + httpRunner
+golang + gin + vue + vue-router + axios + Element + httpRunner + mongodb
 ## Project setup
 ```
 yarn install
@@ -23,4 +23,18 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### 项目展示
+
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/loginPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/indexPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/envIndexPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/envAddPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/apiAddPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/caseAddPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/suiteUpdatePage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/planIndexPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/reportIndexPage.png)
+![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/mockServerIndexPage.png)
+
 
