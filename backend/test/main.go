@@ -2,26 +2,10 @@ package main
 
 import "fmt"
 
-type File struct {
-	name string
-	size int
-	attr struct {
-		perm  int
-		owner int
-	}
-}
-
-type User struct {
-	name string
-	age  int
-}
-
 func main() {
-	f := File{
-		name: "test.txt",
-		//size: 1024,
-	}
-	fmt.Println(f)
-	u1 := User{age: 1}
-	fmt.Println(u1)
+	m := make(map[string]int)
+	m2 := map[string]int{"two": 2, "three": 3}
+	m["one"] = 1
+	fmt.Println(m)
+	fmt.Println(m2)
 }

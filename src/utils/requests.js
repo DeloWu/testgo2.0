@@ -8,7 +8,7 @@ import config from "@config"
 // create an axios instance
 const requests = axios.create({
     baseURL: config.backendBaseUrl, // url = base url + request url
-    withCredentials: false, // send cookies when cross-domain requests
+    withCredentials: true, // send cookies when cross-domain requests
     timeout: config.requestTimeout, // request timeout
     headers: {'Content-Type':'application/json;charset=UTF-8'},
 });

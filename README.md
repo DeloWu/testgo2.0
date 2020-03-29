@@ -26,15 +26,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 项目展示
 
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/loginPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/indexPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/envIndexPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/envAddPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/apiAddPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/caseAddPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/suiteUpdatePage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/planIndexPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/reportIndexPage.png)
-![效果](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/mockServerIndexPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/loginPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/indexPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/envIndexPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/envAddPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/apiAddPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/caseAddPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/suiteUpdatePage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/planIndexPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/reportIndexPage.png)
+![](https://github.com/DeloWu/testgo2.0/blob/master/static/img/projectPreview/mockServerIndexPage.png)
 
 
