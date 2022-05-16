@@ -10,9 +10,7 @@ require (
 	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
 	github.com/facebookgo/structtag v0.0.0-20150214074306-217e25fb9691 // indirect
 	github.com/facebookgo/subset v0.0.0-20200203212716-c811ad88dec4 // indirect
-	github.com/gin-gonic/gin v1.5.0
-	github.com/jinzhu/gorm v1.9.12 // indirect
-	go.mongodb.org/mongo-driver v1.3.0 // indirect
+	github.com/gin-gonic/gin v1.7.0
 	go.uber.org/zap v1.13.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
